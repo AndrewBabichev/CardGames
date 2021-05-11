@@ -4,6 +4,7 @@ import tkinter as tk
 from functools import partial
 from playsound import playsound
 
+
 class Cards(tk.Frame):
     def __init__(self, parent = None):
         super().__init__(parent)
@@ -18,16 +19,19 @@ class Cards(tk.Frame):
         self.back_image = tk.PhotoImage(file = './resourses/cards/back.png')
 
     def create_button(self, cards_id, position, relief = 'groove'):
-        if cards_id is not None:
+        if cards_id is None:
+            button = tk.Button(self.master, image = self.empty_image, relief = relief)
+        elif cards_id == -1:
+            button = tk.Button(self.master, image = self.back_image, relief = relief)
+        else:
             (i, j) = cards_id
             button = tk.Button(self.master, image = self.cards_images[i, j], relief = relief)
-        else:
-            button = tk.Button(self.master, image = self.empty_image, relief = relief)
         button.place(y = position[0], x = position[1])
         return button
 
+
 class Deck(Cards):
-    def __init__(self, parent = None, row = 0, hands = None, player_hand = 0, expand = True):
+    def __init__(self, parent = None, row = 0, hands = None, player_hand = 0, expand = False):
         super().__init__(parent)
         self.row = row
         self.hands = hands
@@ -39,23 +43,22 @@ class Deck(Cards):
         self.cards = []
         self.update()
 
-
     def update(self):
         for deck_card in self.deck_cards:
             deck_card.destroy()
 
         self.deck_cards = []
-        self.deck_cards.append(tk.Button(self.master, image = self.empty_image))
+        self.deck_cards.append(tk.Button(self.master, image = self.empty_image, state = 'disabled'))
         self.deck_cards[-1].place(y = self.row * self.card_height, x = 0)
-        self.deck_cards[-1].bind('<Button-1>', partial(self.draw, self.hands[self.player_hand], 6, 5, True))
-        self.deck_cards[-1].bind('<Button-2>', self.shuffle)
+        #self.deck_cards[-1].bind('<Button-1>', partial(self.draw, self.hands[self.player_hand], 6, 5, True))
+        #self.deck_cards[-1].bind('<Button-2>', self.shuffle)
         self.deck_cards[-1].bind('<Button-3>', partial(self.get, self.hands[self.player_hand]))
 
         for i in range(int(np.ceil(self.deck_cards_ids.size / 13))):
-            self.deck_cards.append(tk.Button(self.master, image = self.back_image))
+            self.deck_cards.append(tk.Button(self.master, image = self.back_image, state = 'disabled'))
             self.deck_cards[-1].place(y = self.row * self.card_height - i*3, x = -i*3)
-            self.deck_cards[-1].bind('<Button-1>', partial(self.draw, self.hands[self.player_hand], 6, 5, True))
-            self.deck_cards[-1].bind('<Button-2>', self.shuffle)
+            #self.deck_cards[-1].bind('<Button-1>', partial(self.draw, self.hands[self.player_hand], 6, 5, True))
+            #self.deck_cards[-1].bind('<Button-2>', self.shuffle)
             self.deck_cards[-1].bind('<Button-3>', partial(self.get, self.hands[self.player_hand]))
 
     def draw(self, hand, amount = 6, empty = 0, drop = False, event = None):
@@ -66,7 +69,7 @@ class Deck(Cards):
                 if drop:
                     self.deck_cards_ids = np.setdiff1d(self.deck_cards_ids, card_id)
                 cards_id.append([card_id[0] // 13, card_id[0] % 13])
-                playsound('./resourses/sounds/draw.wav')
+            playsound('./resourses/sounds/draw.wav')
 
             for i in range(empty):
                 cards_id.append(None)
@@ -84,6 +87,7 @@ class Deck(Cards):
             hand.cards_ids[index] = [i, j]
             hand.show(hand.cards_ids)
             self.update()
+
         elif self.deck_cards_ids.size > 0 and self.expand:
             playsound('./resourses/sounds/draw.wav')
             card_id = np.random.choice(self.deck_cards_ids, (1))
@@ -92,7 +96,6 @@ class Deck(Cards):
             hand.cards_ids.append([i, j])
             hand.show(hand.cards_ids)
             self.update()
-
 
     def shuffle(self, event = None):
         playsound('./resourses/sounds/shuffle.wav')
@@ -104,9 +107,11 @@ class Deck(Cards):
 
 
 class Hand(Cards):
-    def __init__(self, parent = None, row = 0):
+    def __init__(self, parent = None, row = 0, show_cards = True, allow_movement = True):
         super().__init__(parent)
         self.row = row
+        self.show_cards = show_cards
+        self.allow_movement = allow_movement
 
         self.cards_ids = []
         self.cards = []
@@ -140,9 +145,14 @@ class Hand(Cards):
                 card.destroy()
             self.cards = list()
 
-        if len(cards_ids) != 0:
-            for column, cards_id in enumerate(cards_ids):
-                self.cards.append(self.create_button(cards_id, self.position(column)))
-                self.cards[-1].bind('<Button-1>', partial(self.choose_card, column))
-
         self.cards_ids = cards_ids
+
+        if len(cards_ids) != 0:
+
+            for column, cards_id in enumerate(cards_ids):
+                if not self.show_cards and cards_id is not None:
+                    self.cards.append(self.create_button(-1, self.position(column)))
+                else:
+                    self.cards.append(self.create_button(cards_id, self.position(column)))
+                if self.allow_movement:
+                    self.cards[-1].bind('<Button-1>', partial(self.choose_card, column))

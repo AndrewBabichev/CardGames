@@ -1,3 +1,5 @@
+"""Tkinter menu class."""
+
 import tkinter as tk
 
 
@@ -10,8 +12,10 @@ from functools import partial
 
 
 class MainMenu(tk.Frame):
+    """Menu that launch card games."""
 
     def __init__(self, master, apps, apps_names):
+        """Create tkinter GUI."""
         assert len(apps) == len(apps_names)
 
         self.apps = apps
@@ -41,14 +45,15 @@ class MainMenu(tk.Frame):
 
             btn.grid(row=idx, padx=10, pady=20, sticky='NSEW')
 
+    '''
     def change_frame(self, fr):
 
         fr.reset()
         fr.tkraise()
-
+    '''
 
 def init_bj(root):
-
+    """Launch Blackjeck."""
     # root.master.withdraw()
     root = tk.Toplevel(root)
     root.geometry('1000x900')
@@ -63,12 +68,12 @@ def init_bj(root):
 
 
 def find_gamers(root):
-
+    """Launch Fool online."""
     Main(root)
 
 
 def queen(root):
-
+    """Launch Queen."""
     root = tk.Toplevel(root)
     root.geometry('870x900')
 

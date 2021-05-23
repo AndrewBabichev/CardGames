@@ -1,3 +1,5 @@
+"""Startup fool game."""
+
 import tkinter as tk
 import sys
 import websocket
@@ -15,9 +17,16 @@ STATUS = 'Attacked'
 
 
 class ConnectionFinder():
+    """Connect to server and establish connection with game and chat."""
 
     def __init__(self, main, settings, game_server, chat_server):
+        """
+        Create tinter window.
 
+        main - tkinter root
+        settings - contain server addr and player name
+        game_server and chat server - addresses chat and game.
+        """
         self.root = main
         self.main = tk.Toplevel(main)
         self.main.title("Game Settings")
@@ -56,6 +65,7 @@ class ConnectionFinder():
         btn.pack()
 
     def findConnection(self, num_players, player_name):
+        """Send message about user addition."""
         params = {'num_players': num_players,
                   'player_name': player_name.get()}
 
@@ -103,13 +113,15 @@ class ConnectionFinder():
         self.open_app()
 
     def open_app(self):
+        """Start app."""
         App(self.main, self.settings)
 
 
 class ChatWindow(tk.Toplevel):
+    """Create tkinter window for players chatting."""
 
     def __init__(self, main, ws, name, queue, listen_thread=None):
-
+        """Set up settings for chat window."""
         super().__init__(main)
         self.title("Game messenger")
 
@@ -135,7 +147,7 @@ class ChatWindow(tk.Toplevel):
         self.ws.close()
 
     def updateGUI(self):
-
+        """Update window every 0.5 second."""
         if self.listen_thread is None or not self.listen_thread.is_alive():
             return
 
@@ -150,6 +162,7 @@ class ChatWindow(tk.Toplevel):
         self.after(500, self.updateGUI)
 
     def send(self):
+        """Send message on server."""
 
         def send_message():
             self.ws.send(json.dumps({
@@ -165,6 +178,7 @@ class ChatWindow(tk.Toplevel):
 
 
 class FoolGame(tk.Toplevel):
+    """Create game window."""
 
     def __init__(
             self,
@@ -174,7 +188,7 @@ class FoolGame(tk.Toplevel):
             ws_chat,
             queue,
             listen_thread=None):
-
+        """Window initialization."""
         super().__init__(main)
 
         self.main = main
@@ -218,7 +232,7 @@ class FoolGame(tk.Toplevel):
         self.updateGUI()
 
     def updateGUI(self):
-
+        """Update game window every 0.2 second."""
         if self.listen_thread is None or not self.listen_thread.is_alive():
             return
 
@@ -227,7 +241,7 @@ class FoolGame(tk.Toplevel):
             msg = self.queue.get()
             self.referee.handle_message(msg)
 
-        self.after(300, self.updateGUI)
+        self.after(200, self.updateGUI)
 
     def __on_closing(self):
         self.ws_game.close()
@@ -239,9 +253,10 @@ class FoolGame(tk.Toplevel):
 
 
 class App():
+    """Class contain parameters for game and chat windows."""
 
     def __init__(self, main, settings):
-
+        """Create variables for controlling."""
         self.chat_queue = Queue()
         self.game_queue = Queue()
 
@@ -275,7 +290,7 @@ class App():
             self.chat_thread)
 
     def __listen_socket(self, socket, q):
-
+        """Listen socket in thread."""
         while True:
 
             try:
@@ -289,9 +304,10 @@ class App():
 
 
 class Main():
-    def __init__(self, main):
-        # super().__init__()
+    """Container for hardcoded variables such as serv addr."""
 
+    def __init__(self, main):
+        """Read from CLI serv addr if CLI params is empty, then set default."""
         self.main = main
         self.settings = {}
         self.server_addr = "polar-depths-25815.herokuapp.com"

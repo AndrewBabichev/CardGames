@@ -13,7 +13,17 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import django
 import dj_database_url
+from django.conf import settings
+
+#import django
+#django.setup()
+
+
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'mysite.settings'
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,16 +35,17 @@ DATABASES = { 'default': dj_database_url.config(conn_max_age=500) }
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-dnw$4q0@91p1gny6(v9p2!#)zm7+o(ms#hpji%%r^7!90hdarm'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
+with open(os.path.join(STATIC_ROOT, 'secret_key.txt')) as f:
+    SECRET_KEY = f.read().strip()
 # Application definition
-
+#django.setup()
 INSTALLED_APPS = [
     'channels',
     'chat',
@@ -49,6 +60,8 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'chat.middleware.startup.StartupMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -84,7 +97,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [os.environ.get("REDIS_URL")],
         },
     },
 }
@@ -142,4 +155,3 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-

@@ -78,14 +78,15 @@ class ConnectionFinder():
                 ))
                 return ws
 
-            except Exception:
+            except Exception as e:
+
                 print("error")
                 self.error = True
                 self.__get_errro_msg(
                     "Connection error has occured!\nTry connect later..."
                 )
 
-                self.quit()
+                self.main.quit()
 
         def chat_connect():
 
@@ -98,7 +99,7 @@ class ConnectionFinder():
                     "Connection error has occured!\nTry connect later..."
                 )
 
-                self.quit()
+                self.main.quit()
 
             return ws_chat
 

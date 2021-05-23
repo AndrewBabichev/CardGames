@@ -30,7 +30,7 @@ class MainMenu(tk.Frame):
 
         self.quitButton = tk.Button(self, text='Exit',
                                     font=('Helvetica', 16),
-                                    command=self.quit)
+                                    command=self.delete_all)
         self.quitButton.grid(row=len(apps_names), padx=10,
                              pady=20, sticky="NSEW")
 
@@ -45,7 +45,15 @@ class MainMenu(tk.Frame):
 
             btn.grid(row=idx, padx=10, pady=20, sticky='NSEW')
 
+    def delete_all(self):
+        for children in self.master.winfo_children():
+            children.destroy()
+        
+        self.master.quit()
+
+    
     '''
+
     def change_frame(self, fr):
 
         fr.reset()

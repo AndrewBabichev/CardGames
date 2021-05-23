@@ -28,7 +28,9 @@ class Blackjack(Deck):
         self.player_score_button = tk.Button(parent, text='0', font=40)
         super().__init__(parent, row, hands, player_hand)
 
+        self.parent = parent
         self.stage = 0
+
         self.value = {
             0: 11, 1: 2, 2: 3, 3: 4,
             4: 5, 5: 6, 6: 7, 7: 8, 8: 9,
@@ -60,6 +62,7 @@ class Blackjack(Deck):
                     self.enemy_score < 21 and enemy_cards_amount < 6):
 
                 self.get(self.hands[self.enemy_hand])
+
                 self.enemy_score, _ = self._count_score(
                     self.hands[self.enemy_hand]
                 )
@@ -79,6 +82,7 @@ class Blackjack(Deck):
         if self.stage == 0:
             self.shuffle()
             self.stage = 1
+
             self.master.after(100, self.new_game)
         elif self.stage == 1:
             self.get(self.hands[self.enemy_hand])
@@ -87,10 +91,13 @@ class Blackjack(Deck):
         elif self.stage == 2:
             self.get(self.hands[self.player_hand])
             self.stage = 3
+
             self.master.after(100, self.new_game)
+
         elif self.stage == 3:
             self.get(self.hands[self.enemy_hand])
             self.stage = 4
+
             self.master.after(100, self.new_game)
         elif self.stage == 4:
             self.get(self.hands[self.player_hand])
@@ -117,7 +124,9 @@ class Blackjack(Deck):
     def update(self):
         """Update and visualize deck cards and game buttons."""
         super().update()
+
         self.enemy_score, _ = self._count_score(self.hands[self.enemy_hand])
         self.enemy_score_button.configure(text=str(self.enemy_score))
         self.player_score, _ = self._count_score(self.hands[self.player_hand])
         self.player_score_button.configure(text=str(self.player_score))
+

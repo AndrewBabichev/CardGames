@@ -1,7 +1,8 @@
 """Tkinter menu class."""
 
+import gettext
+import sys
 import tkinter as tk
-
 
 from blackjack import Blackjack
 from FoolOnline import Main
@@ -28,9 +29,9 @@ class MainMenu(tk.Frame):
         top.rowconfigure(0, weight=1)
         self.rowconfigure(tuple((i for i in range(len(apps_names)))), weight=1)
 
-        self.quitButton = tk.Button(self, text='Exit',
+        self.quitButton = tk.Button(self, text=_("Exit"),
                                     font=('Helvetica', 16),
-                                    command=self.delete_all)
+                                    command=self._delete_all)
         self.quitButton.grid(row=len(apps_names), padx=10,
                              pady=20, sticky="NSEW")
 
@@ -45,31 +46,22 @@ class MainMenu(tk.Frame):
 
             btn.grid(row=idx, padx=10, pady=20, sticky='NSEW')
 
-    def delete_all(self):
+    def _delete_all(self):
         self.destroy()
         for children in self.master.master.winfo_children():
             children.destroy()
 
-       
         self.master.master.destroy()
-        
-        #self.master.master.quit()
 
-    '''
 
-    def change_frame(self, fr):
-
-        fr.reset()
-        fr.tkraise()
-    '''
-
-def init_bj(root):
-    """Launch Blackjeck."""
+def init_blackjack(root):
+    """Launch Blackjack."""
     # root.master.withdraw()
     root = tk.Toplevel(root)
-    root.geometry('1000x900')
+    root.title(_("Blackjack"))
+    root.geometry('890x670')
 
-    H1 = Hand(root, 0)
+    H1 = Hand(root, 0, allow_movement=False)
     H1.show([None, None, None, None, None, None])
 
     H2 = Hand(root, 2)
@@ -83,10 +75,11 @@ def find_gamers(root):
     Main(root)
 
 
-def queen(root):
+def init_queen(root):
     """Launch Queen."""
     root = tk.Toplevel(root)
-    root.geometry('870x900')
+    root.title(_("Queen"))
+    root.geometry('890x900')
 
     H1 = Queen_Hand(root, row=0, show_cards=False, allow_movement=False)
 
@@ -99,14 +92,26 @@ def queen(root):
 
 if __name__ == '__main__':
 
+    if len(sys.argv) > 1:
+        translation = sys.argv[1]
+    else:
+        translation = 'eng'
+
+    language = gettext.translation(
+        domain='CardGames',
+        localedir='./localization/',
+        languages=[translation]
+    )
+    language.install()
+
     root = tk.Tk()
-
-    root.title('Cards Games')
+    root.title(_("Cards Games"))
     root.geometry('300x500')
-    tmp_names = ['Blackjack', 'Fool-online', 'Queen']
-    app_frames = [init_bj, find_gamers, Queen]
 
-    buttons_frame = tk.LabelFrame(root, text="Games",
+    tmp_names = [_("Blackjack"), _("Fool-online"), _("Queen")]
+    app_frames = [init_blackjack, find_gamers, init_queen]
+
+    buttons_frame = tk.LabelFrame(root, text=_("Games"),
                                   height=500, width=300,
                                   labelanchor='n')
 

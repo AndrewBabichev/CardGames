@@ -5,34 +5,29 @@ import numpy as np
 import glob
 import sys
 import asyncio
-#import websocket
 import json
-
-from tkinter import *
-from skimage.io import imread
-from functools import partial
-
 import websocket
-
-from cards import *
 import requests
-
-
-from threading import Thread
-from queue import Queue
-
-
-import glob
 import time
 
-import tkinter as tk
-import numpy as np
+
 
 
 from os.path import join
 from playsound import playsound
 from functools import partial
-#cards types : hand, table
+
+from tkinter import *
+from skimage.io import imread
+from functools import partial
+
+
+from threading import Thread
+from queue import Queue
+
+from fool_cards import *
+
+
 
 RESOURSES_DIR = 'resourses/cards'
 EMPTY_CARD = 'empty.png'
@@ -46,26 +41,28 @@ STATUS = 'Attacked'
 
 
 
-class ConnectionFinder(tk.Frame):
+class ConnectionFinder():
 
     def __init__(self, main, settings, game_server, chat_server):
 
-        super().__init__(main)
-        self.pack()
-        self.master.title("Game Settings")
-        self.main = main
+        self.root = main
+        self.main = tk.Toplevel(main)
+        #super().__init__(main)
+        #self.pack()
+        self.main.title("Game Settings")
+        #self.main = main
         self.settings = settings
         self.game_server = game_server
         self.chat_server = chat_server
 
         self.error = False
-        l = tk.Label(self, text='Your name:')
+        l = tk.Label(self.main, text='Your name:')
         l.grid(row=0, column=0)
 
         #l2 = tk.Label(self, text='Number players:')
         #l2.grid(row=1, column=0)
         self.name = tk.StringVar()
-        name_entry = tk.Entry(self, textvariable=self.name)
+        name_entry = tk.Entry(self.main, textvariable=self.name)
         name_entry.grid(row=0, column=1)
 
         #options = [2, 3, 4]
@@ -75,14 +72,14 @@ class ConnectionFinder(tk.Frame):
 
 
         self.num_players = 2
-        tk.Button(self, text='Next',
+        tk.Button(self.main, text='Next',
                     command=partial(self.findConnection, self.num_players, self.name)
                     ).grid(row=2, column=1)
-        tk.Button(self, text="Quit", command=lambda: self.quit()).grid(row=2, column=0)
+        tk.Button(self.main, text="Quit", command=lambda: self.quit()).grid(row=2, column=0)
 
 
     def __get_errro_msg(self, msg):
-        root = tk.Toplevel()
+        root = tk.Toplevel(sel.main)
         root.title("Error")
         l = tk.Label(root, text = msg)
         l.pack()
@@ -140,9 +137,11 @@ class ConnectionFinder(tk.Frame):
         self.settings['game_socket'] = ws_game
         self.settings['chat_socket'] = ws_chat
         self.settings['name'] = player_name.get()
-        self.master.deiconify()
-        self.main.open_app()
+        #self.main.deiconify()
+        self.open_app()
 
+    def open_app(self):
+        a = App(self.main, self.settings)
 
 
 
@@ -180,8 +179,8 @@ class ChatWindow(tk.Toplevel):
 
         self.updateGUI()
 
-        def __on_closing(self):
-            self.ws.close()
+    def __on_closing(self):
+        self.ws.close()
 
     def updateGUI(self):
 
@@ -223,7 +222,7 @@ class FoolGame(tk.Toplevel):
         #self.game_root.geometry('870x670')
         self.main = main
         self.title("Fool-online")
-        self.geometry("870x670")
+        self.geometry("1400x900")
         self.protocol("WM_DELETE_WINDOW", self.__on_closing)
         self.name = name
         self.ws_game = ws_game
@@ -308,7 +307,7 @@ class App():
         self.game_thread.start()
         self.chat_thread.start()
 
-        FoolGame(main,name, self.game_socket, self.chat_socket, self.game_queue, self.game_thread)
+        FoolGame(main, name, self.game_socket, self.chat_socket, self.game_queue, self.game_thread)
         ChatWindow(main, self.chat_socket, name, self.chat_queue, self.chat_thread)
 
 
@@ -322,17 +321,19 @@ class App():
                 msg = socket.recv()
             except Exception as e:
                 break
-            print("Recieve:", msg)
+
             if len(msg):
                 msg = json.loads(msg)
                 q.put(msg)
 
 
 
-class Main(tk.Tk):
-    def __init__(self):
-        super().__init__()
+class Main():
+    def __init__(self, main):
+        #super().__init__()
 
+
+        self.main = main
         self.settings = {}
         self.server_addr = "polar-depths-25815.herokuapp.com"
         if len(sys.argv) > 1:
@@ -342,14 +343,17 @@ class Main(tk.Tk):
         self.server_game_addr = "ws://{}/game".format(self.server_addr)
         self.server_chat_addr = "ws://{}/chat".format(self.server_addr)
 
-        self.app = ConnectionFinder(self, self.settings,
+        self.app = ConnectionFinder(main, self.settings,
                             self.server_game_addr,
                             self.server_chat_addr
                             )
 
     def open_app(self):
-        a = App(self, self.settings)
-        self.withdraw()
+        print("try open app")
+        #self.main.destroy()
+        #a = App(self.main, self.settings)
+
+        #self.withdraw()
         #app = App(SETTINGS)
 
 if __name__ == '__main__':

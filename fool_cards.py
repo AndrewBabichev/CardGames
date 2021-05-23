@@ -117,7 +117,7 @@ class SimpleDeck(CardsCreator, tk.Frame):
         self.update()
 
 
-class FoolDeck(Deck):
+class FoolDeck(SimpleDeck):
     '''
         Deck that have royal card
     '''
@@ -138,11 +138,11 @@ class FoolDeck(Deck):
             self.royal_card_btn.bind('<Button-1>', self.referee.get_card)
             self.royal_card_btn.place(relx=self.deck_pos_x+0.025, rely=self.deck_pos_y+0.03)
 
-        Deck.update(self)
+        SimpleDeck.update(self)
 
 
     def destroy(self):
-        Deck.destroy(self)
+        SimpleDeck.destroy(self)
 
 
         self.royal_card_btn.destroy()

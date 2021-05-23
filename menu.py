@@ -5,6 +5,7 @@ import numpy as np
 from tkinter import *
 from blackjack import *
 from FoolOnline import *
+from queen import *
 from cards import *
 
 from functools import partial
@@ -51,7 +52,7 @@ class MainMenu(tk.Frame):
 def init_bj(root):
 
 
-    self.root.withdraw()
+    #root.master.withdraw()
     root = Toplevel(root)
     root.geometry('1000x900')
 
@@ -68,31 +69,28 @@ def init_bj(root):
 
 def find_gamers(root):
 
-    m = Main()
-    m.mainloop()
-    root.destroy()
+    m = Main(root)
+    #m.mainloop()
+    #root.destroy()
 
 
-'''
-def empty(root):
+
+def queen(root):
+
+    pass 
+    '''
     root = Toplevel(root)
-    root.geometry('200x100')
-    name = tk.Entry(root)
-    name.grid(row=0, sticky='WE')
+    root.geometry('870x900')
 
-    OPTIONS = [2, 3, 4]
-    variable = IntVar(root)
-    variable.set(OPTIONS[0]) # default value
+    H1 = Queen_Hand(root, row=0, show_cards=False, allow_movement=False)
 
-    w = OptionMenu(root, variable, *OPTIONS)
-    w.grid(row=1, sticky='WE')
+    H2 = Queen_Hand(root, row=1, show_cards=False, allow_movement=False)
 
-    btn = tk.Button(root, text='Start the game', command=lambda : find_gamers(root))
-    btn.grid(row=2, sticky='WE')
-'''
+    H3 = Queen_Hand(root, row=3, show_cards=True, allow_movement=True)
 
-
-
+    Q = Queen(root, row=2, hands=[H1, H2, H3], player_hand=2)
+    #root.mainloop()
+    '''
 if __name__ == '__main__':
 
 
@@ -100,8 +98,8 @@ if __name__ == '__main__':
 
     root.title('Cards Games')
     root.geometry('300x500')
-    tmp_names = ['Blackjack', 'Fool-online']
-    app_frames = [init_bj, find_gamers]
+    tmp_names = ['Blackjack', 'Fool-online', 'Queen']
+    app_frames = [init_bj, find_gamers, Queen]
 
 
     buttons_frame = tk.LabelFrame(  root, text="Games",

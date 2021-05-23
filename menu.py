@@ -46,12 +46,14 @@ class MainMenu(tk.Frame):
             btn.grid(row=idx, padx=10, pady=20, sticky='NSEW')
 
     def delete_all(self):
-        for children in self.master.winfo_children():
+        self.destroy()
+        for children in self.master.master.winfo_children():
             children.destroy()
 
-        self.master.destroy()
-        self.master.quit()
-
+       
+        self.master.master.destroy()
+        
+        #self.master.master.quit()
 
     '''
 

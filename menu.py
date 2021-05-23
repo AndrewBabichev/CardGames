@@ -48,10 +48,11 @@ class MainMenu(tk.Frame):
     def delete_all(self):
         for children in self.master.winfo_children():
             children.destroy()
-        
+
+        self.master.destroy()
         self.master.quit()
 
-    
+
     '''
 
     def change_frame(self, fr):

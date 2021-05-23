@@ -243,7 +243,7 @@ class Queen(Deck):
 
         self.end_game(0)
 
-
+'''
 if __name__ == '__main__':
 
     root = tk.Tk()
@@ -257,3 +257,5 @@ if __name__ == '__main__':
 
     Q = Queen(root, row=2, hands=[H1, H2, H3], player_hand=2)
     root.mainloop()
+
+'''

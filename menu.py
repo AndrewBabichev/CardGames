@@ -4,6 +4,7 @@ import numpy as np
 
 from tkinter import *
 from blackjack import *
+from FoolOnline import *
 from cards import *
 
 from functools import partial
@@ -33,7 +34,7 @@ class MainMenu(tk.Frame):
         self.game_buttons = []
         for idx in range(len(apps)):
 
-            closure = partial(self.apps[idx], self) #fantastic
+            closure = partial(self.apps[idx], self)
 
             btn = tk.Button(self, text=self.apps_names[idx],
                                         font=('Helvetica', 16),
@@ -50,7 +51,7 @@ class MainMenu(tk.Frame):
 def init_bj(root):
 
 
-
+    self.root.withdraw()
     root = Toplevel(root)
     root.geometry('1000x900')
 
@@ -67,24 +68,12 @@ def init_bj(root):
 
 def find_gamers(root):
 
+    m = Main()
+    m.mainloop()
     root.destroy()
-    root = tk.Tk()
-    #root.geometry('100x200')
-    label1 = tk.Label(root, text="Wait other users:")
-    label1.pack()
-    users_str = ''
-    users = tk.StringVar()
-    users.set(users)
-
-    label2 = tk.Label(root, text=users)
-    label2.pack()
-
-    btn = tk.Button(root, text="play", state='disabled')
-    btn.pack()
 
 
-
-
+'''
 def empty(root):
     root = Toplevel(root)
     root.geometry('200x100')
@@ -100,6 +89,8 @@ def empty(root):
 
     btn = tk.Button(root, text='Start the game', command=lambda : find_gamers(root))
     btn.grid(row=2, sticky='WE')
+'''
+
 
 
 if __name__ == '__main__':
@@ -110,7 +101,7 @@ if __name__ == '__main__':
     root.title('Cards Games')
     root.geometry('300x500')
     tmp_names = ['Blackjack', 'Fool-online']
-    app_frames = [init_bj, empty]
+    app_frames = [init_bj, find_gamers]
 
 
     buttons_frame = tk.LabelFrame(  root, text="Games",

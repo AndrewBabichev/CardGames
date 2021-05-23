@@ -499,7 +499,7 @@ class CardGetter():
         return len(self.cards)
 
     def reset(self):
-        self.cards = [(i, j) for i in range(0, 4)
+        self.cards = [(i, j) for i in range(0, 1)
                             for j in range(4, 13)]
 
 #CARD_GETTER = CardGetter()
@@ -515,7 +515,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         users_have =  await DatabaseHandler.get_total_num_cards(self.room_name)
         deck_size = self.card_getter.size()
-        print(users_have, deck_size)
         num_cards = users_have + deck_size
 
 
@@ -570,7 +569,23 @@ class GameConsumer(AsyncWebsocketConsumer):
 
     async def set_roles(self):
         state = GLOBAL_VARIABLES_DICT[self.room_name]['state']
-        if state == 'START':
+        if state ==    '''
+    def draw(self, player, amount = 6, empty = 0, drop = False, event = None):
+        if self.deck_cards_ids.get_size() > 0:
+            cards_id = []
+
+            for i in range(amount - empty):
+                if not player.can_take:
+                    break
+                card_id = self.deck_cards_ids.get()
+
+                cards_id.insert(0, (card_id // 13, card_id % 13))
+                playsound('resourses/sounds/draw.wav')
+
+            player.show()
+
+            self.update()
+    ''' 'START':
             attacker_name, responser_name = \
                         await DatabaseHandler.set_random(self.room_name)
 

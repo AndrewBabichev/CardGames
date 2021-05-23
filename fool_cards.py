@@ -1,11 +1,8 @@
-import glob
-import time
-
 import tkinter as tk
 import numpy as np
-import PIL
-from PIL import Image, ImageTk
 
+
+from PIL import Image, ImageTk
 from os.path import join
 from playsound import playsound
 from functools import partial
@@ -16,7 +13,9 @@ import json
 PLAYERS_TYPES = ['atack', 'responce', 'addition']
 STATUS = 'Attacked'
 
-#Card - button that have image and type
+# Card - button that have image and type
+
+
 class Card(tk.Button):
     '''
         Special Button Class containing
@@ -29,15 +28,24 @@ class Card(tk.Button):
         self.card_id = card_id
         super().__init__(parent, image=self.image, **kwargs)
 
-#Card that have position in the hand
+# Card that have position in the hand
+
+
 class PlayerCard(Card):
     '''
         Card that have index in player hand
     '''
-    def __init__(self, parent=None, card_id=None, image=None, index=None, **kwargs):
+
+    def __init__(
+            self,
+            parent=None,
+            card_id=None,
+            image=None,
+            index=None,
+            **kwargs):
         self.index = index
         super().__init__(parent, card_id, image, **kwargs)
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 
 
 class CardsCreator():
@@ -45,42 +53,51 @@ class CardsCreator():
         Class for creating card objects
         contains paths to image resourses
     '''
+
     def __init__(self, image_dir=None):
 
         self.image_dir = image_dir
-        self.cards_images = np.zeros((4, 13), dtype = tk.PhotoImage)
-        self.PIL_images =  {}
-        #0 - Hearts (Черви), 1 - Diamonds (Буби), 2 - Clubs (Крести), 3 - Spades (Пики)
+        self.cards_images = np.zeros((4, 13), dtype=tk.PhotoImage)
+        self.PIL_images = {}
+
         for i in range(0, self.cards_images.shape[0]):
             for j in range(0, self.cards_images.shape[1]):
-                name = join(self.image_dir, '{}_{}.png'.format(str(i), str(j+1)))
+                name = join(
+                    self.image_dir, '{}_{}.png'.format(
+                        str(i), str(
+                            j + 1)))
                 self.PIL_images[i, j] = Image.open(name)
-                self.cards_images[i, j] = ImageTk.PhotoImage(self.PIL_images[i, j])
+                self.cards_images[i, j] = ImageTk.PhotoImage(
+                    self.PIL_images[i, j])
 
+        self.empty_image = tk.PhotoImage(
+            file=join(self.image_dir, 'empty.png'))
+        self.back_image = tk.PhotoImage(file=join(self.image_dir, 'back.png'))
 
-        self.empty_image = tk.PhotoImage(file = join(self.image_dir, 'empty.png'))
-        self.back_image = tk.PhotoImage(file = join(self.image_dir, 'back.png'))
-
-    def create_card(self, parent,  cards_id, relief = 'groove', transform=None):
+    def create_card(self, parent, cards_id, relief='groove', transform=None):
 
         if transform == 'rotate':
             image = ImageTk.PhotoImage(
-                    self.PIL_images[cards_id[0], cards_id[1]].transpose(Image.ROTATE_90))
+                self.PIL_images[cards_id[0], cards_id[1]].transpose(
+                    Image.ROTATE_90)
+            )
         else:
             image = self.cards_images[cards_id[0], cards_id[1]]
 
         c = Card(parent,
-                card_id = cards_id,
-                image=image,
-                relief=relief)
+                 card_id=cards_id,
+                 image=image,
+                 relief=relief)
 
         return c
+
 
 class SimpleDeck(CardsCreator, tk.Frame):
     '''
         Deck class that give player card
     '''
-    def __init__(self, parent = None, image_dir=None, row=0, referee=None):
+
+    def __init__(self, parent=None, image_dir=None, row=0, referee=None):
         CardsCreator.__init__(self, image_dir)
         tk.Frame.__init__(self, parent)
 
@@ -93,8 +110,6 @@ class SimpleDeck(CardsCreator, tk.Frame):
         self.deck_pos_y = 0.3
         self.update()
 
-
-
     def update(self):
         for deck_card in self.deck_cards:
             deck_card.destroy()
@@ -103,9 +118,13 @@ class SimpleDeck(CardsCreator, tk.Frame):
 
         indicator = 1 if self.size > 1 else 0
         for i in range(int(self.size / 5) + indicator):
-            self.deck_cards.append(tk.Button(self.master, image = self.back_image, state = tk.DISABLED))
-            self.deck_cards[-1].place(relx=self.deck_pos_x - i*0.002,
-                                    rely=self.deck_pos_y - i*0.002) #  why 3?
+            self.deck_cards.append(
+                tk.Button(
+                    self.master,
+                    image=self.back_image,
+                    state=tk.DISABLED))
+            self.deck_cards[-1].place(relx=self.deck_pos_x - i * 0.002,
+                                      rely=self.deck_pos_y - i * 0.002)
             self.deck_cards[-1].bind('<Button-1>', self.referee.get_card)
 
     def destroy(self):
@@ -121,41 +140,45 @@ class FoolDeck(SimpleDeck):
     '''
         Deck that have royal card
     '''
-    def __init__(self, parent, image_dir, row=0, referee=None, royal_card=None):
+
+    def __init__(
+            self,
+            parent,
+            image_dir,
+            row=0,
+            referee=None,
+            royal_card=None):
 
         self.royal_card = royal_card
         self.royal_card_btn = tk.Button(None)
-        super().__init__(parent, image_dir,row, referee)
-
-
+        super().__init__(parent, image_dir, row, referee)
 
     def update(self):
 
         self.royal_card_btn.destroy()
 
         if self.royal_card and self.size:
-            self.royal_card_btn = self.create_card(self.master, self.royal_card, transform='rotate')
+            self.royal_card_btn = self.create_card(
+                self.master, self.royal_card, transform='rotate')
             self.royal_card_btn.bind('<Button-1>', self.referee.get_card)
-            self.royal_card_btn.place(relx=self.deck_pos_x+0.025, rely=self.deck_pos_y+0.03)
+            self.royal_card_btn.place(
+                relx=self.deck_pos_x + 0.025,
+                rely=self.deck_pos_y + 0.03)
 
         SimpleDeck.update(self)
-
 
     def destroy(self):
         SimpleDeck.destroy(self)
 
-
         self.royal_card_btn.destroy()
-
-
-
 
 
 class Table(tk.Button):
     '''
         Container for current cards
     '''
-    def __init__ (self, parent, relwidth, relheight, columns=2, referee=None):
+
+    def __init__(self, parent, relwidth, relheight, columns=2, referee=None):
         '''
             relwidth, relheight - size in relative coords
             colunms - have many cards suited in row
@@ -174,20 +197,20 @@ class Table(tk.Button):
         self.a_cards = {}
         self.r_cards = {}
 
-
-
     def add_card(self, card_type, card_value):
         '''
             draw attack card on table
         '''
         card = self.referee.deck.create_card(self, (card_type, card_value))
-        card.grid(row=self.empty_row, column=self.empty_column, padx = 40, pady=40)
-
-
+        card.grid(
+            row=self.empty_row,
+            column=self.empty_column,
+            padx=40,
+            pady=40)
 
         self.cards_values.add(card_value)
         self.a_cards[(card_type, card_value)] = card
-        self.empty_row += 1 if self.empty_column == self.columns-1 else 0
+        self.empty_row += 1 if self.empty_column == self.columns - 1 else 0
         self.empty_column = (self.empty_column + 1) % self.columns
 
     def response(self, r_card, a_card):
@@ -199,9 +222,8 @@ class Table(tk.Button):
 
         x, y = a_card.winfo_x(), a_card.winfo_y()
 
-
         c = self.referee.deck.create_card(self, r_card.card_id)
-        c.place(x=x+25, y=y+25)
+        c.place(x=x + 25, y=y + 25)
 
         a_card = self.a_cards[a_card.card_id]
 
@@ -247,15 +269,20 @@ class Referee(object):
 
             self.update()
     '''
-    def __init__(self, player=None, deck=None, table=None, info=None, score_table=None):
 
+    def __init__(
+            self,
+            player=None,
+            deck=None,
+            table=None,
+            info=None,
+            score_table=None):
 
         self.player = player
         self.deck = deck
         self.table = table
-        self.info =  info
+        self.info = info
         self.score_table = score_table
-
 
     def add_card_on_table(self, card):
         '''
@@ -269,7 +296,6 @@ class Referee(object):
 
             self.table['state'] = tk.DISABLED
             self.player.update()
-
 
         card_type, card_value = card.card_id
 
@@ -288,7 +314,6 @@ class Referee(object):
                 self.info.set("Not allowed operation")
                 return None
 
-
     def response(self, r_card, a_card):
         '''
             If player must response
@@ -296,10 +321,10 @@ class Referee(object):
         '''
         def can_response(r_card, a_card):
             less = a_card.card_id[0] == r_card.card_id[0] and\
-                                        a_card.card_id[1] < r_card.card_id[1]
+                a_card.card_id[1] < r_card.card_id[1]
 
             royal = r_card.card_id[0] == self.royal_card[0] and \
-                                a_card.card_id[0] != self.royal_card[0]
+                a_card.card_id[0] != self.royal_card[0]
 
             print("response:", less, royal)
 
@@ -319,9 +344,9 @@ class Referee(object):
         '''
         if self.player.status == 'response':
             addition_cards = list(self.table.a_cards.values()) +\
-                                            list(self.table.r_cards.values())
+                list(self.table.r_cards.values())
 
-            self.player.cards +=  addition_cards
+            self.player.cards += addition_cards
             self.player.update()
             self.table.reset()
 
@@ -344,7 +369,8 @@ class Referee(object):
         for card in self.table.a_cards.values():
             card['state'] = tk.ACTIVE
             card.bind('<Button-1>',
-                        partial(self.player.action, card))
+                      partial(self.player.action, card))
+
 
 class OnlineReferee(Referee):
     '''
@@ -353,7 +379,7 @@ class OnlineReferee(Referee):
     '''
 
     def __init__(self, game_socket, chat_socket, player=None,
-                    deck=None, table=None, info=None, score_table=None):
+                 deck=None, table=None, info=None, score_table=None):
         '''
             game_socket - socket for game messages
             chat_socket - socket for char message
@@ -362,7 +388,6 @@ class OnlineReferee(Referee):
         self.chat_socket = chat_socket
 
         super().__init__(player, deck, table, info, score_table)
-
 
     def add_card_on_table(self, card):
         '''
@@ -381,7 +406,7 @@ class OnlineReferee(Referee):
                         self.player.name,
                         card[0], card[1]
                     ),
-                    'action_info':{
+                    'action_info': {
                         'card_type': card[0],
                         'card_value': card[1],
                         'remain_cards': len(self.player.cards)
@@ -396,7 +421,6 @@ class OnlineReferee(Referee):
 
             if not len(self.player.cards) and not self.deck.size:
 
-
                 self.__free_user()
 
     def response(self, r_card, a_card):
@@ -405,13 +429,14 @@ class OnlineReferee(Referee):
         if is_response:
             msg = json.dumps({
                 'type': 'game_message',
-                'message':{
+                'message': {
                     'sender': self.player.name,
                     'action_type': 'card_response',
-                    'description': "Player {} response card ({}, {}) on ({}, {})".format(
+                    'description': "Player {} response card \
+                                        ({}, {}) on ({}, {})".format(
                         self.player.name, r_card.card_id[0], r_card.card_id[1],
                         a_card.card_id[0], a_card.card_id[1]),
-                    'action_info':{
+                    'action_info': {
                         'a_card_type': a_card.card_id[0],
                         'a_card_value': a_card.card_id[1],
 
@@ -432,12 +457,13 @@ class OnlineReferee(Referee):
         num_cards = Referee.take(self)
 
         msg = json.dumps({
-            'type':'game_message',
-            'message':{
+            'type': 'game_message',
+            'message': {
                 'action_type': 'player_take',
                 'sender': self.player.name,
-                'description': "Player {} take cards!".format(self.player.name),
-                'action_info':{
+                'description': "Player {}\
+                                    take cards!".format(self.player.name),
+                'action_info': {
                     'player_name': self.player.name,
                     'num_cards': num_cards
                 }
@@ -447,15 +473,14 @@ class OnlineReferee(Referee):
         self.player.state = 'wait'
         self.game_socket.send(msg)
 
-
     def ready(self):
         msg = json.dumps({
-            'type':'game_message',
-            'message':{
-                'action_type':'player_ready',
+            'type': 'game_message',
+            'message': {
+                'action_type': 'player_ready',
                 'sender': self.player.name,
                 'desctiption': "Player {} cannot add card!",
-                'action_info':{
+                'action_info': {
                     'player_name': self.player.name
                 }
             }
@@ -476,51 +501,50 @@ class OnlineReferee(Referee):
         self.player.state = 'all_cards_taken'
 
     def get_card(self, event=None):
-        if self.player.status =='take_cards' and self.player.should_take > 0:
-                playsound('./resourses/sounds/draw.wav')
-                msg = json.dumps({
-                    'type': 'game_message',
-                    'message': {
-                        'action_type': 'get_card',
-                        'sender': self.player.name,
-                    }
-                })
-                self.game_socket.send(msg)
-                self.player.should_take -= 1
-                self.info.set("You should take {} cards".format(self.player.should_take))
-
-        if self.player.status =='take_cards' and  self.player.should_take == 0:
-            self.__send_all_taken()
-
-
-    def __free_user(self):
-
-            self.player.status = 'free'
-            self.player.ready['state'] = tk.DISABLED
-            self.player.take['state'] = tk.DISABLED
-
+        if self.player.status == 'take_cards' and self.player.should_take > 0:
+            playsound('./resourses/sounds/draw.wav')
             msg = json.dumps({
                 'type': 'game_message',
                 'message': {
+                    'action_type': 'get_card',
                     'sender': self.player.name,
-                    'action_type': 'player_free',
-                    'description': "Player {}  is free".format(
-                        self.player.name,
-                    ),
                 }
             })
-
-            self.info.set("Wait end of the game!")
             self.game_socket.send(msg)
+            self.player.should_take -= 1
+            self.info.set(
+                "You should take {} cards".format(
+                    self.player.should_take))
+
+        if self.player.status == 'take_cards' and self.player.should_take == 0:
+            self.__send_all_taken()
+
+    def __free_user(self):
+
+        self.player.status = 'free'
+        self.player.ready['state'] = tk.DISABLED
+        self.player.take['state'] = tk.DISABLED
+
+        msg = json.dumps({
+            'type': 'game_message',
+            'message': {
+                'sender': self.player.name,
+                'action_type': 'player_free',
+                'description': "Player {}  is free".format(
+                    self.player.name,
+                ),
+            }
+        })
+
+        self.info.set("Wait end of the game!")
+        self.game_socket.send(msg)
 
     def __reset_all(self):
         self.deck.reset()
         self.player.reset()
         self.table.reset()
 
-
     def handle_message(self, msg):
-
         '''
             recieve message from server and make some actions that depends on
             messagetype
@@ -530,12 +554,9 @@ class OnlineReferee(Referee):
 
         if msg['action_type'] == 'player_addition':
 
-
             self.info.set("[{}]:Player {} come in your room!".format(
-                                                                msg['time'],
-                                                                msg['sender']))
-
-
+                msg['time'],
+                msg['sender']))
 
         elif msg['action_type'] == 'users_scores':
             for key in msg['action_info']['scores'].keys():
@@ -546,24 +567,23 @@ class OnlineReferee(Referee):
             self.score_table.update(scores)
 
         elif msg['action_type'] == 'card_addition':
-                print('in addition')
-                card_type = msg['action_info']['card_type']
-                card_value = msg['action_info']['card_value']
-                descr = msg['description']
-                sender_name = msg['sender']
-                if self.player.name != sender_name:
-                    print("should add")
-                    self.table.add_card(card_type, card_value)
+            print('in addition')
+            card_type = msg['action_info']['card_type']
+            card_value = msg['action_info']['card_value']
+            sender_name = msg['sender']
 
-                if self.player.status == 'response':
-                    self.player.take['state'] = tk.ACTIVE
-                    self.player.ready['state'] = tk.DISABLED
-                else:
-                    self.player.take['state'] = tk.DISABLED
-                    self.player.ready['state'] = tk.DISABLED
+            if self.player.name != sender_name:
 
-                playsound('./resourses/sounds/draw.wav')
+                self.table.add_card(card_type, card_value)
 
+            if self.player.status == 'response':
+                self.player.take['state'] = tk.ACTIVE
+                self.player.ready['state'] = tk.DISABLED
+            else:
+                self.player.take['state'] = tk.DISABLED
+                self.player.ready['state'] = tk.DISABLED
+
+            playsound('./resourses/sounds/draw.wav')
 
         elif msg['action_type'] == 'players':
 
@@ -585,25 +605,21 @@ class OnlineReferee(Referee):
 
             remain_cards = int(msg['action_info']['remain_cards'])
 
-
-
             r_card = self.deck.create_card(None, (r_card_type, r_card_value))
             a_card = self.table.a_cards[(a_card_type, a_card_value)]
 
-
             self.table.response(r_card, a_card)
 
-
-            if not len(self.table.a_cards) and self.player.status =='addition':
+            if not len(
+                    self.table.a_cards) and self.player.status == 'addition':
                 self.player.ready['state'] = tk.ACTIVE
 
-            elif not len(self.table.a_cards) and self.player.status == 'response':
+            elif not len(self.table.a_cards) and \
+                    self.player.status == 'response':
                 self.player.take['state'] = tk.DISABLED
 
-            elif self.player.status == 'free' or remain_cards==0:
+            elif self.player.status == 'free' or remain_cards == 0:
                 self.ready()
-
-
 
             playsound('./resourses/sounds/draw.wav')
 
@@ -622,22 +638,26 @@ class OnlineReferee(Referee):
                     self.__send_all_taken()
                 else:
                     self.player.status = 'take_cards'
-                    self.player.should_take = int(msg['action_info']['num_cards'])
-                    self.info.set("You should take {} cards".format(self.player.should_take))
+                    self.player.should_take = int(
+                        msg['action_info']['num_cards'])
+                    self.info.set(
+                        "You should take {} cards".format(
+                            self.player.should_take))
             else:
-                self.info.set("Wait until {} take cards".format(msg['action_info']['user_name']))
-
+                self.info.set(
+                    "Wait until {} take cards".format(
+                        msg['action_info']['user_name']))
 
         elif msg['action_type'] == 'get_card':
-                card_type = msg['action_info']['card_type']
-                card_value = msg['action_info']['card_value']
-                deck_size = msg['action_info']['deck_size']
-                card = self.deck.create_card(None, (card_type, card_value))
-                self.deck.size = deck_size
+            card_type = msg['action_info']['card_type']
+            card_value = msg['action_info']['card_value']
+            deck_size = msg['action_info']['deck_size']
+            card = self.deck.create_card(None, (card_type, card_value))
+            self.deck.size = deck_size
 
-                self.player.cards.append(card)
-                self.deck.update()
-                self.player.update()
+            self.player.cards.append(card)
+            self.deck.update()
+            self.player.update()
 
         elif msg['action_type'] == 'another_user_get':
             playsound('./resourses/sounds/draw.wav')
@@ -651,11 +671,9 @@ class OnlineReferee(Referee):
             self.royal_card = self.deck.royal_card
             self.deck.update()
 
-
         elif msg['action_type'] == 'empty_deck':
             print('empty_deck')
             self.deck.destroy()
-
 
         elif msg['action_type'] == 'user_loose':
 
@@ -683,7 +701,9 @@ class OnlineReferee(Referee):
         elif msg['action_type'] == 'repeat':
             ask_window = tk.Toplevel(self.player.master)
             ask_window.title("Repeat?")
-            text = tk.Label(ask_window, text="Would you like to continue game?")
+            text = tk.Label(
+                ask_window,
+                text="Would you like to continue game?")
             no_btn = tk.Button(ask_window, text='No')
             no_btn['command'] = partial(self.__send_ans, 'no', no_btn)
 
@@ -698,8 +718,8 @@ class OnlineReferee(Referee):
             user_name = msg['sender']
             print(self.score_table.players_scores_tk)
             self.score_table.deletePlayer(user_name)
-            self.info.set("User {} leave your room! Wait other players...."\
-                        .format(msg['sender']))
+            self.info.set("User {} leave your room! Wait other players...."
+                          .format(msg['sender']))
 
     def __send_ans(self, text, btn):
         msg = json.dumps({
@@ -707,7 +727,7 @@ class OnlineReferee(Referee):
             'message': {
                 'sender': self.player.name,
                 'action_type': 'repeat_game',
-                'action_info':{
+                'action_info': {
                     'answer': text
                 }
             }
@@ -729,17 +749,16 @@ class OnlineReferee(Referee):
             btn.master.master.master.quit()
 
 
-
 class Player(tk.Frame):
     '''
         Class that contain players cards
         can do some actions which depeneds on player role
     '''
-    def __init__(self, parent = None, row = 0, name="Unknown", referee=None):
+
+    def __init__(self, parent=None, row=0, name="Unknown", referee=None):
 
         super().__init__(parent)
         self.place(relx=0.2, rely=0.8)
-
 
         self.name = name
         self.referee = referee
@@ -749,29 +768,28 @@ class Player(tk.Frame):
         self.status = None
         self.clicked_button = None
 
-        #-----------------------------------------------------------------------
+        # -----------------------------------------------------------------------
         self.player_buttons = tk.Frame(parent)
         self.player_buttons.place(relx=0.8, rely=0.68)
         self.take = tk.Button(self.player_buttons,
-                                text="Take",
-                                state=tk.DISABLED,
-                                command=self.referee.take)
+                              text="Take",
+                              state=tk.DISABLED,
+                              command=self.referee.take)
 
         self.take.grid(row=0, column=0)
-        self.ready = tk.Button( self.player_buttons,
-                                text='Ready',
-                                state=tk.DISABLED,
-                                command=self.referee.ready)
+        self.ready = tk.Button(self.player_buttons,
+                               text='Ready',
+                               state=tk.DISABLED,
+                               command=self.referee.ready)
         print('Debug:', self.ready['state'])
         self.ready.grid(row=0, column=1)
-        #-----------------------------------------------------------------------
-
+        # -----------------------------------------------------------------------
 
     def reset(self):
         for card in self.cards:
             card.destroy()
 
-        self.cards =[]
+        self.cards = []
         self.should_take = 0
         self.status = None
         self.clicked_button = None
@@ -792,7 +810,6 @@ class Player(tk.Frame):
 
         self.cards = new_cards
 
-
     def deleteCard(self, card):
         self.cards.pop(card.index)
         card.destroy()
@@ -811,7 +828,6 @@ class Player(tk.Frame):
         self.cards[index_s] = Card(None, card_id_f, card_image_f)
         self.update()
 
-
     def action(self, btn, event=None):
 
         if self.clicked_button is None and btn in self.cards:
@@ -820,8 +836,11 @@ class Player(tk.Frame):
             if self.status == 'attack':
 
                 self.referee.table['state'] = tk.ACTIVE
-                self.referee.table.bind('<Button-1>',
-                                partial(self.action, self.referee.table))
+                self.referee.table.bind(
+                    '<Button-1>',
+                    partial(
+                        self.action,
+                        self.referee.table))
 
             elif self.status == "response":
                 self.referee.make_cards_active()
@@ -844,6 +863,7 @@ class Player(tk.Frame):
 
             self.clicked_button = None
 
+
 class ScoreTable(tk.Frame):
 
     def __init__(self, parent, relx, rely):
@@ -854,29 +874,28 @@ class ScoreTable(tk.Frame):
         self.players_scores_tk = {}
         self.players_scores_values = {}
 
-
     def addPlayer(self, player_name):
         self.players_scores_tk[player_name] = {'frame': tk.Frame(self),
-                                            'position': self.length}
+                                               'position': self.length}
 
         frame = self.players_scores_tk[player_name]['frame']
 
         frame.grid(row=self.length)
 
         text_label = tk.Label(frame, text="{} : ".format(player_name),
-                                fg="#eee", bg="#333",
-                                font="Arial 16")
-
+                              fg="#eee", bg="#333",
+                              font="Arial 16")
 
         text_label.grid(row=0, column=0)
 
         self.players_scores_values[player_name] = tk.StringVar()
         self.players_scores_values[player_name].set("0")
-        score_label = tk.Label(frame,
-                        textvariable=self.players_scores_values[player_name],
-                        fg="#eee", bg="#333",
-                        font="Arial 16"
-                        )
+        score_label = tk.Label(
+            frame,
+            textvariable=self.players_scores_values[player_name],
+            fg="#eee",
+            bg="#333",
+            font="Arial 16")
         score_label.grid(row=0, column=1)
         self.length += 1
 
@@ -894,7 +913,7 @@ class ScoreTable(tk.Frame):
                 frame.grid_forget()
                 elem['position'] -= 1
                 frame.grid(row=elem['position'])
-        self.length  -= 1
+        self.length -= 1
 
     def update(self, users_scores):
         for user_name, value in users_scores.items():

@@ -1,44 +1,17 @@
-import time
-import matplotlib.pyplot as plt
 import tkinter as tk
-import numpy as np
-import glob
 import sys
-import asyncio
-import json
 import websocket
-import requests
-import time
+import json
 
-
-
-
-from os.path import join
-from playsound import playsound
 from functools import partial
-
-from tkinter import *
-from skimage.io import imread
-from functools import partial
-
-
 from threading import Thread
 from queue import Queue
 
-from fool_cards import *
-
-
-
+from fool_cards import OnlineReferee, FoolDeck, Player, Table, ScoreTable
 RESOURSES_DIR = 'resourses/cards'
 EMPTY_CARD = 'empty.png'
 BACK_CARD = 'back.png'
-
-
-
 STATUS = 'Attacked'
-#Card - button that have image and type
-
-
 
 
 class ConnectionFinder():
@@ -47,87 +20,77 @@ class ConnectionFinder():
 
         self.root = main
         self.main = tk.Toplevel(main)
-        #super().__init__(main)
-        #self.pack()
         self.main.title("Game Settings")
-        #self.main = main
         self.settings = settings
         self.game_server = game_server
         self.chat_server = chat_server
 
         self.error = False
-        l = tk.Label(self.main, text='Your name:')
-        l.grid(row=0, column=0)
+        name_lab = tk.Label(self.main, text='Your name:')
+        name_lab.grid(row=0, column=0)
 
-        #l2 = tk.Label(self, text='Number players:')
-        #l2.grid(row=1, column=0)
         self.name = tk.StringVar()
         name_entry = tk.Entry(self.main, textvariable=self.name)
-        name_entry.grid(row=0, column=1)
-
-        #options = [2, 3, 4]
-        #self.num_players = IntVar()
-        #self.num_players.set(options[0])
-        #tk.OptionMenu(self, self.num_players, *options).grid(row=1, column=1)
-
+        name_entry.grid(row=0, column=1, columnspan=2)
 
         self.num_players = 2
-        tk.Button(self.main, text='Next',
-                    command=partial(self.findConnection, self.num_players, self.name)
-                    ).grid(row=2, column=1)
-        tk.Button(self.main, text="Quit", command=lambda: self.quit()).grid(row=2, column=0)
+        next_btn = tk.Button(self.main,
+                             text='Next',
+                             command=partial(self.findConnection,
+                                             self.num_players,
+                                             self.name))
 
+        next_btn.grid(row=1, column=1)
+        tk.Button(self.main, text="Quit",
+                  command=lambda: self.quit()).grid(row=1, column=0)
 
     def __get_errro_msg(self, msg):
-        root = tk.Toplevel(sel.main)
+        root = tk.Toplevel(self.main)
         root.title("Error")
-        l = tk.Label(root, text = msg)
-        l.pack()
 
-        b = tk.Button(root, text='Ok',
-                command = lambda root=root: root.destroy())
-        b.pack()
+        lab = tk.Label(root, text=msg)
+        lab.pack()
 
+        btn = tk.Button(root, text='Ok',
+                        command=lambda root=root: root.destroy())
+        btn.pack()
 
     def findConnection(self, num_players, player_name):
-        params = {  'num_players': num_players,
-                    'player_name': player_name.get()}
+        params = {'num_players': num_players,
+                  'player_name': player_name.get()}
 
         def game_connect():
             try:
                 ws = websocket.create_connection(self.game_server)
                 ws.send(json.dumps({
-                                    'type':'look_up',
-                                    'message':params}
-                                    ))
+                    'type': 'look_up',
+                    'message': params}
+                ))
                 return ws
-            except Exception as e:
+
+            except Exception:
                 print("error")
                 self.error = True
                 self.__get_errro_msg(
                     "Connection error has occured!\nTry connect later..."
-                    )
+                )
 
                 self.quit()
-
-            #res = ws.recv()
 
         def chat_connect():
 
             try:
                 ws_chat = websocket.create_connection(self.chat_server)
-            except Exception as e:
+            except Exception:
                 print("error")
                 self.error = True
                 self.__get_errro_msg(
                     "Connection error has occured!\nTry connect later..."
-                    )
+                )
 
                 self.quit()
 
             return ws_chat
-
-
 
         ws_game = game_connect()
         if self.error:
@@ -137,16 +100,10 @@ class ConnectionFinder():
         self.settings['game_socket'] = ws_game
         self.settings['chat_socket'] = ws_chat
         self.settings['name'] = player_name.get()
-        #self.main.deiconify()
         self.open_app()
 
     def open_app(self):
-        a = App(self.main, self.settings)
-
-
-
-
-
+        App(self.main, self.settings)
 
 
 class ChatWindow(tk.Toplevel):
@@ -156,15 +113,12 @@ class ChatWindow(tk.Toplevel):
         super().__init__(main)
         self.title("Game messenger")
 
-
         self.ws = ws
         self.name = name
         self.queue = queue
         self.listen_thread = listen_thread
         self.protocol("WM_DELETE_WINDOW", self.__on_closing)
 
-
-        #self.chat_root.geometry("400x300)
         self.text = tk.Text(self, height=20, width=40)
         self.text.grid(row=0, columnspan=2)
 
@@ -174,8 +128,6 @@ class ChatWindow(tk.Toplevel):
 
         self.send_btn = tk.Button(self, text='Send', command=self.send)
         self.send_btn.grid(row=1, column=1)
-
-        #print("text_var:", self.textVar.get())
 
         self.updateGUI()
 
@@ -189,11 +141,11 @@ class ChatWindow(tk.Toplevel):
 
         while not self.queue.empty():
             item = self.queue.get()
-            type, msg  = item['type'],  item['message']
-            self.text.insert(tk.END, '[{}] {} : {}\n'.format( msg['time'],
-                                                            msg['sender'],
-                                                            msg['payload'])
-                                                            )
+            _, msg = item['type'], item['message']
+            self.text.insert(tk.END, '[{}] {} : {}\n'.format(msg['time'],
+                                                             msg['sender'],
+                                                             msg['payload'])
+                             )
 
         self.after(500, self.updateGUI)
 
@@ -201,25 +153,30 @@ class ChatWindow(tk.Toplevel):
 
         def send_message():
             self.ws.send(json.dumps({
-                            'type': 'chat_message',
-                            'message': {
-                                'sender': self.name,
-                                'payload': self.entry.get()
-                                }
-                        }))
+                'type': 'chat_message',
+                'message': {
+                    'sender': self.name,
+                    'payload': self.entry.get()
+                }
+            }))
 
         send_message()
         self.entry.delete(0, 'end')
 
+
 class FoolGame(tk.Toplevel):
 
-    def __init__(self, main, name, ws_game, ws_chat, queue, listen_thread=None):
-
+    def __init__(
+            self,
+            main,
+            name,
+            ws_game,
+            ws_chat,
+            queue,
+            listen_thread=None):
 
         super().__init__(main)
 
-        #self.game_root = tk.Tk()
-        #self.game_root.geometry('870x670')
         self.main = main
         self.title("Fool-online")
         self.geometry("1400x900")
@@ -233,9 +190,7 @@ class FoolGame(tk.Toplevel):
         self.info_pool = []
         self.stage = 0
 
-
-
-        #-----------------------------------------------------------------------
+        # -----------------------------------------------------------------------
         self.info_frame = tk.Frame(self)
         self.info_frame.place(relx=0.5, rely=0.05)
         self.info_s = tk.StringVar()
@@ -243,7 +198,7 @@ class FoolGame(tk.Toplevel):
         self.info_var = tk.Label(self.info_frame, textvariable=self.info_s)
         self.info.grid(row=0, column=0)
         self.info_var.grid(row=0, column=1)
-        #-----------------------------------------------------------------------
+        # -----------------------------------------------------------------------
 
         self.referee = OnlineReferee(ws_game, ws_chat)
         self.referee.info = self.info_s
@@ -256,7 +211,6 @@ class FoolGame(tk.Toplevel):
 
         self.table = Table(self, 0.53, 0.6, 4, self.referee)
         self.referee.table = self.table
-
 
         self.score_table = ScoreTable(self, 0.75, 0.1)
         self.referee.score_table = self.score_table
@@ -283,6 +237,7 @@ class FoolGame(tk.Toplevel):
 
         self.main.quit()
 
+
 class App():
 
     def __init__(self, main, settings):
@@ -294,32 +249,38 @@ class App():
         self.chat_socket = settings['chat_socket']
         name = settings['name']
 
-        self.game_thread = Thread (
-                        target = self.__listen_socket,
-                        args=(self.game_socket, self.game_queue))
+        self.game_thread = Thread(
+            target=self.__listen_socket,
+            args=(self.game_socket, self.game_queue))
 
-
-
-        self.chat_thread = Thread (
-                        target = self.__listen_socket,
-                        args=(self.chat_socket, self.chat_queue))
+        self.chat_thread = Thread(
+            target=self.__listen_socket,
+            args=(self.chat_socket, self.chat_queue))
 
         self.game_thread.start()
         self.chat_thread.start()
 
-        FoolGame(main, name, self.game_socket, self.chat_socket, self.game_queue, self.game_thread)
-        ChatWindow(main, self.chat_socket, name, self.chat_queue, self.chat_thread)
-
-
+        FoolGame(
+            main,
+            name,
+            self.game_socket,
+            self.chat_socket,
+            self.game_queue,
+            self.game_thread)
+        ChatWindow(
+            main,
+            self.chat_socket,
+            name,
+            self.chat_queue,
+            self.chat_thread)
 
     def __listen_socket(self, socket, q):
-
 
         while True:
 
             try:
                 msg = socket.recv()
-            except Exception as e:
+            except Exception:
                 break
 
             if len(msg):
@@ -327,11 +288,9 @@ class App():
                 q.put(msg)
 
 
-
 class Main():
     def __init__(self, main):
-        #super().__init__()
-
+        # super().__init__()
 
         self.main = main
         self.settings = {}
@@ -339,24 +298,18 @@ class Main():
         if len(sys.argv) > 1:
             self.server_addr = sys.argv[1]
 
-
         self.server_game_addr = "ws://{}/game".format(self.server_addr)
         self.server_chat_addr = "ws://{}/chat".format(self.server_addr)
 
         self.app = ConnectionFinder(main, self.settings,
-                            self.server_game_addr,
-                            self.server_chat_addr
-                            )
+                                    self.server_game_addr,
+                                    self.server_chat_addr
+                                    )
 
-    def open_app(self):
-        print("try open app")
-        #self.main.destroy()
-        #a = App(self.main, self.settings)
 
-        #self.withdraw()
-        #app = App(SETTINGS)
-
+'''
 if __name__ == '__main__':
 
     m = Main()
     m.mainloop()
+'''

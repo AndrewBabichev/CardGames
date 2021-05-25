@@ -2,7 +2,7 @@
 
 import tkinter as tk
 import numpy as np
-
+import tkinter.font as font
 
 from PIL import Image, ImageTk
 from os.path import join
@@ -688,6 +688,8 @@ class OnlineReferee(Referee):
             self.score_table.deletePlayer(user_name)
             self.info.set("User {} leave your room! Wait other players...."
                           .format(msg['sender']))
+        elif msg['action_type'] == 'connection_closed':
+            self.info.set("Problems with connection! Connection_closed!")
 
     def __send_ans(self, text, btn):
         msg = json.dumps({
@@ -736,6 +738,25 @@ class Player(tk.Frame):
         self.status = None
         self.clicked_button = None
 
+        self.visible_cards = tk.Frame(parent)
+        self.visible_cards.place(relx=0.2, rely=0.8)
+
+        self.num_visible = 8
+
+        self.left=0
+        self.right = self.num_visible
+
+        btn_font = font.Font(family='Helvetica', size=20, weight='bold')
+
+        self.left_button = tk.Button(parent, text="Left",
+                                    font=btn_font, command=self.__left)
+
+        self.left_button.place(relx=0.05, rely=0.85)
+
+        self.right_button =  tk.Button(parent, text="Right",
+                            font=btn_font, command=self.__right)
+
+        self.right_button.place(relx=0.9, rely=0.85)
         # -----------------------------------------------------------------------
         self.player_buttons = tk.Frame(parent)
         self.player_buttons.place(relx=0.8, rely=0.68)
@@ -753,6 +774,20 @@ class Player(tk.Frame):
         self.ready.grid(row=0, column=1)
         # -----------------------------------------------------------------------
 
+
+    def __left(self):
+        if len(self.cards) > self.num_visible and self.left>0:
+            self.left -= 1
+            self.right -= 1
+            self.update()
+
+    def __right(self):
+        if len(self.cards) > self.num_visible and self.right<len(self.cards):
+            self.left += 1
+            self.right += 1
+            self.update()
+
+
     def reset(self):
         for card in self.cards:
             card.destroy()
@@ -761,18 +796,29 @@ class Player(tk.Frame):
         self.should_take = 0
         self.status = None
         self.clicked_button = None
+        self.left=0
+        self.right = self.num_visible
+
 
     def take(self):
         self.referee.take()
 
     def update(self):
         new_cards = []
+        num_cards = len(self.cards)
+        if num_cards <= self.num_visible:
+            self.left=0
+            self.right = self.num_visible
+
         for idx, card in enumerate(self.cards):
 
-            pc = PlayerCard(self, card.card_id,
+            pc = PlayerCard(self.visible_cards, card.card_id,
                             card.image, idx)
-            pc.bind('<Button-1>', partial(self.action, pc))
-            pc.grid(row=0, column=idx)
+            if idx >= self.left and self.right>=idx:
+                print("should show")
+                pc.bind('<Button-1>', partial(self.action, pc))
+                pc.grid(row=0, column=idx-self.left)
+
             new_cards.append(pc)
             card.destroy()
 
@@ -871,6 +917,9 @@ class ScoreTable(tk.Frame):
 
     def deletePlayer(self, player_name):
         """when player is disconnected pop his scores from table."""
+        if player_name not in self.players_scores_tk:
+            return
+
         elem = self.players_scores_tk.pop(player_name)
         self.players_scores_values.pop(player_name)
         player_info, player_position = elem['frame'], elem['position']

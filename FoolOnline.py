@@ -4,6 +4,7 @@ import tkinter as tk
 import sys
 import websocket
 import json
+import string
 
 from functools import partial
 from threading import Thread
@@ -51,7 +52,7 @@ class ConnectionFinder():
 
         next_btn.grid(row=1, column=1)
         tk.Button(self.main, text="Quit",
-                  command=lambda: self.quit()).grid(row=1, column=0)
+                  command=lambda: self.main.quit()).grid(row=1, column=0)
 
     def __get_errro_msg(self, msg):
         root = tk.Toplevel(self.main)
@@ -61,13 +62,21 @@ class ConnectionFinder():
         lab.pack()
 
         btn = tk.Button(root, text='Ok',
-                        command=lambda root=root: root.destroy())
+                        command=lambda root=root: self.main.destroy())
         btn.pack()
+
 
     def findConnection(self, num_players, player_name):
         """Send message about user addition."""
         params = {'num_players': num_players,
                   'player_name': player_name.get()}
+
+        def isAscii(s):
+            for c in s:
+                if c not in string.ascii_letters:
+                    return False
+            return True
+
 
         def game_connect():
             try:
@@ -78,35 +87,44 @@ class ConnectionFinder():
                 ))
                 return ws
 
-            except Exception:
-                print("error")
+            except Exception as e:
+                print("error:", e)
                 self.error = True
                 self.__get_errro_msg(
                     "Connection error has occured!\nTry connect later..."
                 )
 
-                self.quit()
+                #self.main.destroy()
 
         def chat_connect():
 
             try:
                 ws_chat = websocket.create_connection(self.chat_server)
-            except Exception:
-                print("error")
+                return ws_chat
+            except Exception as e:
+                print("error:", e)
                 self.error = True
                 self.__get_errro_msg(
                     "Connection error has occured!\nTry connect later..."
                 )
 
-                self.quit()
+                #self.main.destroy()
 
-            return ws_chat
+
+
+        is_asci = isAscii(player_name.get())
+        if not is_asci or not len(player_name.get()):
+            warning = tk.Label(self.main, text='Write correct name on english!')
+            warning.grid(row=2,column=0, columnspan=2)
+            return
 
         ws_game = game_connect()
+        ws_chat = chat_connect()
         if self.error:
-            self.quit()
-        else:
-            ws_chat = chat_connect()
+            print("is_error")
+            self.main.destroy()
+            return
+
         self.settings['game_socket'] = ws_game
         self.settings['chat_socket'] = ws_chat
         self.settings['name'] = player_name.get()
@@ -114,6 +132,7 @@ class ConnectionFinder():
 
     def open_app(self):
         """Start app."""
+        self.main.withdraw()
         App(self.main, self.settings)
 
 
@@ -129,7 +148,7 @@ class ChatWindow(tk.Toplevel):
         self.name = name
         self.queue = queue
         self.listen_thread = listen_thread
-        self.protocol("WM_DELETE_WINDOW", self.__on_closing)
+        self.protocol("WM_DELETE_WINDOW", self.destroy)
 
         self.text = tk.Text(self, height=20, width=40)
         self.text.grid(row=0, columnspan=2)
@@ -143,7 +162,8 @@ class ChatWindow(tk.Toplevel):
 
         self.updateGUI()
 
-    def __on_closing(self):
+    def destroy(self):
+        super().destroy()
         self.ws.close()
 
     def updateGUI(self):
@@ -193,8 +213,8 @@ class FoolGame(tk.Toplevel):
 
         self.main = main
         self.title("Fool-online")
-        self.geometry("1400x900")
-        self.protocol("WM_DELETE_WINDOW", self.__on_closing)
+        self.geometry("1600x1000")
+        self.protocol("WM_DELETE_WINDOW", self.destroy)
         self.name = name
         self.ws_game = ws_game
         self.ws_chat = ws_chat
@@ -243,13 +263,16 @@ class FoolGame(tk.Toplevel):
 
         self.after(200, self.updateGUI)
 
-    def __on_closing(self):
+    def destroy(self):
+        super().destroy()
+
+
         self.ws_game.close()
         self.ws_chat.close()
         for child in self.main.winfo_children():
             child.destroy()
 
-        self.main.quit()
+        self.main.destroy()
 
 
 class App():
@@ -301,6 +324,12 @@ class App():
             if len(msg):
                 msg = json.loads(msg)
                 q.put(msg)
+        q.put(json.dumps({
+                        'type':'game_message',
+                        'message':{
+                                'action_type':"connection_closed"
+                                }
+                        }))
 
 
 class Main():
@@ -312,8 +341,7 @@ class Main():
         self.settings = {}
         self.server_addr = "polar-depths-25815.herokuapp.com"
         if len(sys.argv) > 1:
-            self.server_addr = sys.argv[1]
-
+            self.server_addr = str(sys.argv[1])
         self.server_game_addr = "ws://{}/game".format(self.server_addr)
         self.server_chat_addr = "ws://{}/chat".format(self.server_addr)
 
@@ -321,11 +349,3 @@ class Main():
                                     self.server_game_addr,
                                     self.server_chat_addr
                                     )
-
-
-'''
-if __name__ == '__main__':
-
-    m = Main()
-    m.mainloop()
-'''

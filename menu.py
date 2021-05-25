@@ -52,7 +52,7 @@ class MainMenu(tk.Frame):
 
        
         self.master.master.destroy()
-        
+
         #self.master.master.quit()
 
     '''

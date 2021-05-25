@@ -28,8 +28,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'mysite.settings'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-DATABASES = { 'default': dj_database_url.config(conn_max_age=500) }
+DATABASES = { 'default': dj_database_url.config() }
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -97,7 +96,8 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [os.environ.get("REDIS_URL")],
+            #"hosts": [os.environ.get("REDIS_URL")],
+            "hosts": [('localhost', 6379)]
         },
     },
 }

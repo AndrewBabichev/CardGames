@@ -1,3 +1,0 @@
-[console_scripts]
-cards = CardGames.__main__:main
-

@@ -14,8 +14,17 @@
 ## Интерфейс
 Интерфейс главного меню с выбором игры:
 
-![Main_Menu](resourses/Main_Menu.png "Main_Menu")
+![Main_Menu](description/Main_Menu.png "Main_Menu")
 
 Интерфейс одной из игр (блекджэк):
 
-![Game](resourses/Game.png "Game")
+![Game](description/Game.png "Game")
+
+Интрефейс настроек подключения.
+
+![Settings](description/settings.png "Settings")
+Необходимо ввести имя пользователя на английском языке
+
+![Fool-Online](description/fool.png "Fool-Online")
+Интерфейс игры-дурак онлайн, есть возможность для переписки у игроков,
+имеется лидерборд игроков в пределах игровой сессии.

@@ -688,6 +688,7 @@ class OnlineReferee(Referee):
             self.score_table.deletePlayer(user_name)
             self.info.set("User {} leave your room! Wait other players...."
                           .format(msg['sender']))
+
         elif msg['action_type'] == 'connection_closed':
             self.info.set("Problems with connection! Connection_closed!")
 

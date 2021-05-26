@@ -1,7 +1,0 @@
-README.md
-menu.py
-setup.py
-CardGames.egg-info/PKG-INFO
-CardGames.egg-info/SOURCES.txt
-CardGames.egg-info/dependency_links.txt
-CardGames.egg-info/top_level.txt

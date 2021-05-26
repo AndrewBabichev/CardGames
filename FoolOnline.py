@@ -88,13 +88,22 @@ class ConnectionFinder():
                 return ws
 
             except Exception as e:
+<<<<<<< HEAD
                 print("error:", e)
+=======
+
+                print("error")
+>>>>>>> bc194fcf1fc888c829000e3a13c1819695640106
                 self.error = True
                 self.__get_errro_msg(
                     "Connection error has occured!\nTry connect later..."
                 )
 
+<<<<<<< HEAD
                 #self.main.destroy()
+=======
+                self.main.quit()
+>>>>>>> bc194fcf1fc888c829000e3a13c1819695640106
 
         def chat_connect():
 
@@ -108,8 +117,12 @@ class ConnectionFinder():
                     "Connection error has occured!\nTry connect later..."
                 )
 
+<<<<<<< HEAD
                 #self.main.destroy()
 
+=======
+                self.main.quit()
+>>>>>>> bc194fcf1fc888c829000e3a13c1819695640106
 
 
         is_asci = isAscii(player_name.get())

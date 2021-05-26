@@ -149,17 +149,19 @@ class Deck(Cards):
             hand.show(cards_ids)
             self.update()
 
-    def get(self, hand, event=None):
+    def get(self, hand, event=None, card_id=None):
         """
         Draw one card to specified hand and visualize it.
 
         Args:
             hand: card hand to draw to
+            card_id: card_id to get, default is None
         """
         if None in hand.cards_ids and self.deck_cards_ids.size > 0:
             playsound('./resourses/sounds/draw.wav')
             index = hand.cards_ids.index(None)
-            card_id = np.random.choice(self.deck_cards_ids, (1))
+            if card_id is None:
+                card_id = np.random.choice(self.deck_cards_ids, (1))
             self.deck_cards_ids = np.setdiff1d(self.deck_cards_ids, card_id)
 
             i, j = card_id[0] // 13, card_id[0] % 13
@@ -169,7 +171,8 @@ class Deck(Cards):
 
         elif self.expand and self.deck_cards_ids.size > 0:
             playsound('./resourses/sounds/draw.wav')
-            card_id = np.random.choice(self.deck_cards_ids, (1))
+            if card_id is None:
+                card_id = np.random.choice(self.deck_cards_ids, (1))
             self.deck_cards_ids = np.setdiff1d(self.deck_cards_ids, card_id)
 
             i, j = card_id[0] // 13, card_id[0] % 13

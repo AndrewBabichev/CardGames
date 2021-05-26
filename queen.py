@@ -45,9 +45,6 @@ class Queen_Hand(Hand):
             self.cards_ids.pop(min(index, self.change_index))
             self.show(self.cards_ids)
             self.change_index = -1
-            if len(self.cards_ids) == 0:
-                messagebox.showinfo(message="Win")
-                Q.master.after(200, Q.new_game())
         else:
             super().choose_card(index)
 
@@ -72,7 +69,7 @@ class Queen(Deck):
 
         self.ready_button = tk.Button(
             parent,
-            text='Ready',
+            text=_("Ready"),
             font=40,
             command=self.pass_turn
         )
@@ -147,7 +144,7 @@ class Queen(Deck):
             stage: stage to set after function
         """
         if len(self.hands[self.player_hand].cards_ids) == 0:
-            messagebox.showinfo(message="Win")
+            messagebox.showinfo(message=_("Win"))
             self.new_game()
         else:
             enemy_hands = list()
@@ -157,7 +154,7 @@ class Queen(Deck):
                     enemy_hands.append(enemy_hand)
             self.enemy_hands = enemy_hands
             if (len(self.enemy_hands) == 0):
-                messagebox.showinfo(message="Lose")
+                messagebox.showinfo(message=_("Lose"))
                 self.new_game()
             else:
                 self.enemy_hand = self.enemy_hands[-1]
@@ -171,6 +168,7 @@ class Queen(Deck):
 
         Opponent draws card, removes pairs and passes turn
         """
+        self.end_game(stage=2)
         if self.stage == 2:
             self.draw_list = []
             for i in range(len(self.enemy_hands) - 1):
@@ -178,7 +176,6 @@ class Queen(Deck):
                     [self.enemy_hands[i], self.enemy_hands[i+1]]
                 )
             self.draw_list.append([self.player_hand, self.enemy_hands[0]])
-            print(self.draw_list)
             for i, indices in enumerate(self.draw_list):
                 self.master.after(
                     2000 * i,

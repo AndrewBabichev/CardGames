@@ -1,0 +1,15 @@
+.gitignore
+mysite/chat/__pycache__/**
+mysite/static/**
+mysite/env/**
+mysite/*.sqlite3
+mysite/chat/migrations/**
+mysite/.git
+mysite/mysite/__pycache__/
+mysite/.gitignore
+__pycache__/**
+*~main
+*.pyc
+
+*__pycache__*
+*.pot

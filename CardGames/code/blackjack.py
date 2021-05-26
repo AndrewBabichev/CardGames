@@ -5,28 +5,25 @@ import tkinter as tk
 from .cards import Deck
 from tkinter import messagebox
 
+#RESOURSES_DIR = 'resourses'
 
 class Blackjack(Deck):
-    """Handler for blackjack game.
-
-    :param parent: parameter to be passed to tkinter.Frame constructor,
-        defaults to None
-    :param row: row to visualize deck on, defaults to 0
-    :type row: int
-    :param hands: card hands to handle, defaults to None
-    :param player_hand: index to player hand, defaults to 0
-    :type player_hand: int
-    :param expand: whether to expand card hand or to keep it to 6 cards,
-        defaults to False
-    :type expand: bool
-    :param fast: whether to start game fast or smoothly
-    :type fast: bool
-    """
+    """Handler for blackjack game."""
 
     def __init__(
             self, parent=None, row=0,
             hands=None, player_hand=0, expand=False, fast=False):
-        """Initialize bj params and start new game."""
+        """
+        Create deck and game buttons, initialize bj params and start new game.
+
+        Args:
+            parent: parameter to be passed to tkinter.Frame constructor
+            row: row to visualize deck on
+            hands: card hands to handle
+            player_hand: index to player hand
+            expand: whether to expand card hand or to keep it to 6 cards
+            fast: whether to start game fast or smoothly
+        """
         self.player_hand = player_hand
         self.enemy_hand = 1 - self.player_hand
         self.enemy_score_button = tk.Button(
@@ -123,9 +120,12 @@ class Blackjack(Deck):
         """
         Compute hand`s cards value.
 
-        :param hand: card hand to compute score
-        :return:computed hand score
-        :rtype: int
+        Args:
+            hand: card hand to compute score
+
+        Returns:
+            int: computed hand score
+
         """
         score, amount = 0, 0
         for card_id in hand.cards_ids:

@@ -2,20 +2,24 @@
 
 import numpy as np
 import tkinter as tk
+import os
 
 from functools import partial
 from playsound import playsound
+from os.path import join
 
+RESOURSES_DIR = os.path.join(os.path.dirname(__file__), "..", 'resources')
 
 class Cards(tk.Frame):
-    """Class for basic operation with cards.
-
-    :param parent: parameter to be passed to tkinter.Frame constructor,
-        defaults to None
-    """
+    """Class for basic operation with cards."""
 
     def __init__(self, parent=None):
-        """Initialize all card`s images."""
+        """
+        Initialize all card`s images.
+
+        Args:
+            parent: parameter to be passed to tkinter.Frame constructor
+        """
         super().__init__(parent)
         # 0 - Hearts, 1 - Diamonds, 2 - Clubs, 3 - Spades
         self.cards_images = np.zeros((4, 13), dtype=tk.PhotoImage)
@@ -23,24 +27,25 @@ class Cards(tk.Frame):
 
         for i in range(self.cards_images.shape[0]):
             for j in range(self.cards_images.shape[1]):
-                name = './resourses/cards/' + str(i) + '_' + str(j) + '.png'
+                name = join(RESOURSES_DIR, 'cards', '{}_{}.png'.format(i, j))
                 self.cards_images[i, j] = tk.PhotoImage(file=name)
-        self.empty_image = tk.PhotoImage(file='./resourses/cards/empty.png')
-        self.back_image = tk.PhotoImage(file='./resourses/cards/back.png')
+        self.empty_image = tk.PhotoImage(file=join(RESOURSES_DIR,
+                                                'cards/empty.png'))
+        self.back_image = tk.PhotoImage(file=join(RESOURSES_DIR,
+                                                'cards/back.png'))
 
     def create_button(self, card_id, position, relief='groove'):
         """
         Create specified card`s button in specified position.
 
-        :param card_id: id of card to create; could be either list
-            [card_suit, card_value] or -1 for blank space or
+        Args:
+        card_id: either list [card_suit, card_value] or -1 for blank space or
             None for back of cards
-        :param position: desired y coordinate and x coordinate for button
-        :type position: list
-        :param relief: relief style for button, defaults to groove
-        :type relief: string
-        :return: created button
-        :rtype: tkinter.Button
+        position: list [desired y coordinate, desired x coordinate]
+
+        Returns:
+            tkinter.Button: created button
+
         """
         if card_id is None:
             button = tk.Button(
@@ -66,24 +71,21 @@ class Cards(tk.Frame):
 
 
 class Deck(Cards):
-    """Base class for game handlers.
-
-    :param parent: parameter to be passed to tkinter.Frame constructor,
-        defaults to None
-    :param row: row to visualize deck on, defaults to 0
-    :type row: int
-    :param hands: card hands to handle, defaults to None
-    :param player_hand: index to player hand, defaults to 0
-    :type player_hand: int
-    :param expand: whether to expand card hand or to keep it to 6 cards,
-        defaults to False
-    :type expand: bool
-    """
+    """Base class for game handlers."""
 
     def __init__(
             self, parent=None, row=0,
             hands=None, player_hand=0, expand=False):
-        """Create card deck and initialize common game parameters."""
+        """
+        Create card deck and initialize common game parameters.
+
+        Args:
+            parent: parameter to be passed to tkinter.Frame constructor
+            row (int): row to visualize deck on
+            hands: card hands to handle
+            player_hand: index to player hand
+            expand: whether to expand card hand or to keep it to 6 cards
+        """
         super().__init__(parent)
         self.row = row
         self.hands = hands
@@ -129,17 +131,14 @@ class Deck(Cards):
         """
         Draw desired amount of cards to specified hand and visualize them.
 
-        :param hands: card hands to handle
-        :param amount: total amount of cards to draw, defaults to 6
-        :type amount: int
-        :param empty: number of drawed card to be empty, defaults to 0
-        :type empty: int
-        :param drop: whether to return drawed cards to deck or not,
-            defaults to False
-        :type drop: bool
+        Args:
+            hand: card hand to draw to
+            amount: total amount of cards to draw
+            empty: number of drawed card to be empty
+            drop: whether to return drawed cards to deck or not
         """
         if self.deck_cards_ids.size > 0:
-            playsound('./resourses/sounds/draw.wav')
+            playsound(join(RESOURSES_DIR, 'sounds/draw.wav'))
             cards_ids = []
             for i in range(amount - empty):
                 card_id = np.random.choice(self.deck_cards_ids, (1))
@@ -159,12 +158,12 @@ class Deck(Cards):
         """
         Draw one card to specified hand and visualize it.
 
-        :param hand: card hand to draw to
-        :param card_id: card_id to get, defaults to None
-        :type card_id: list
+        Args:
+            hand: card hand to draw to
+            card_id: card_id to get, default is None
         """
         if None in hand.cards_ids and self.deck_cards_ids.size > 0:
-            playsound('./resourses/sounds/draw.wav')
+            playsound(join(RESOURSES_DIR, 'sounds/draw.wav'))
             index = hand.cards_ids.index(None)
             if card_id is None:
                 card_id = np.random.choice(self.deck_cards_ids, (1))
@@ -176,7 +175,7 @@ class Deck(Cards):
             self.update()
 
         elif self.expand and self.deck_cards_ids.size > 0:
-            playsound('./resourses/sounds/draw.wav')
+            playsound(join(RESOURSES_DIR, 'sounds/draw.wav'))
             if card_id is None:
                 card_id = np.random.choice(self.deck_cards_ids, (1))
             self.deck_cards_ids = np.setdiff1d(self.deck_cards_ids, card_id)
@@ -188,7 +187,7 @@ class Deck(Cards):
 
     def shuffle(self, event=None):
         """Reset the deck and card hands."""
-        playsound('./resourses/sounds/shuffle.wav')
+        playsound(join(RESOURSES_DIR, 'sounds/shuffle.wav'))
         self.deck_cards_ids = np.arange(52)
         self.update()
 
@@ -197,23 +196,20 @@ class Deck(Cards):
 
 
 class Hand(Cards):
-    """Class that simulates actions of a card hand.
-
-    :param parent: parameter to be passed to tkinter.Frame constructor,
-        defaults to None
-    :param row: row to visualize hand on, defaults to 0
-    :type row: int
-    :param show_cards: whether to show cards or their backs, defaults to True
-    :type show_cards: bool
-    :param allow_movement: whether to allow to move cards within the hand,
-        defaults to True
-    :type allow_movement: bool
-    """
+    """Class that simulates actions of a card hand."""
 
     def __init__(
             self, parent=None, row=0,
             show_cards=True, allow_movement=True):
-        """Initialize card hand parameters."""
+        """
+        Initialize card hand parameters.
+
+        Args:
+            parent: parameter to be passed to tkinter.Frame constructor
+            row (int): row to visualize hand on
+            show_cards: whether to show cards or their backs
+            allow_movement: whether to allow to move cards within the hand
+        """
         super().__init__(parent)
         self.row = row
         self.show_cards = show_cards
@@ -227,8 +223,8 @@ class Hand(Cards):
         """
         Return card`s position based on its column.
 
-        :param column: desired place in card hand (0 .. len(cards_ids) - 1)
-        :type column: int
+        Args:
+            column: desired place in card hand (0 .. len(cards_ids) - 1)
         """
         if len(self.cards_ids) <= 6:
             return [self.row * self.card_height, column * self.card_width]
@@ -241,8 +237,8 @@ class Hand(Cards):
         """
         Highlight or swap specified card.
 
-        :param index: index to hand`s card to perform action on
-        :type index: int
+        Args:
+            index: index to hand`s card to perform action on
         """
         if self.change_index == -1:
             self.cards[index].destroy()
@@ -258,7 +254,7 @@ class Hand(Cards):
             self.change_index = index
         else:
             if self.change_index != index:
-                playsound('./resourses/sounds/playcard.wav')
+                playsound(join(RESOURSES_DIR, 'sounds/playcard.wav'))
                 self.cards_ids[index], self.cards_ids[self.change_index] = \
                     self.cards_ids[self.change_index], self.cards_ids[index]
                 self.show(self.cards_ids)
@@ -271,8 +267,8 @@ class Hand(Cards):
         """
         Visualize specified cards.
 
-        :param cards_ids: card`s identifiers to visualize
-        :type cards_ids: list
+        Args:
+            cards_ids: card`s identifiers to visualize
         """
         for card in self.cards:
             card.destroy()

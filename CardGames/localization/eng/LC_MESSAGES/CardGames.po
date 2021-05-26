@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-05-23 21:58+0300\n"
+"POT-Creation-Date: 2021-05-26 23:58+0300\n"
 "PO-Revision-Date: 2021-05-23 21:58+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en_US\n"
@@ -18,47 +18,171 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: menu.py:32
-msgid "Exit"
-msgstr "Exit"
-
-#: menu.py:60 menu.py:109
-msgid "Blackjack"
-msgstr "Blackjack"
-
-#: menu.py:80 menu.py:109
-msgid "Queen"
-msgstr "Queen"
-
-#: menu.py:106
-msgid "Cards Games"
-msgstr "Cards Games"
-
-#: menu.py:109
-msgid "Fool-online"
-msgstr "Fool-online"
-
-#: menu.py:112
-msgid "Games"
-msgstr "Games"
-
-#: queen.py:72
-msgid "Ready"
-msgstr "Ready"
-
-#: blackjack.py:82 queen.py:147
-msgid "Win"
-msgstr "Win"
-
-#: blackjack.py:68 blackjack.py:86 queen.py:157
-msgid "Lose"
-msgstr "Lose"
-
-#: blackjack.py:51
+#: blackjack.py:52
 msgid "Stand"
 msgstr "Stand"
 
-#: blackjack.py:84
+#: blackjack.py:69 blackjack.py:87 queen.py:162
+msgid "Lose"
+msgstr "Lose"
+
+#: blackjack.py:83 queen.py:152
+msgid "Win"
+msgstr "Win"
+
+#: blackjack.py:85
 msgid "Draw"
 msgstr "Draw"
+
+#: fool_cards.py:288
+msgid "Not allowed operation"
+msgstr "Not allowed operation"
+
+#: fool_cards.py:331
+msgid "You attack!"
+msgstr "You attack!"
+
+#: fool_cards.py:335
+msgid "You response!"
+msgstr "You response!"
+
+#: fool_cards.py:340
+msgid "You add!"
+msgstr "You add!"
+
+#: fool_cards.py:472
+msgid "Wait other players!"
+msgstr "Wait other players!"
+
+#: fool_cards.py:487 fool_cards.py:613
+msgid "Cards to take:"
+msgstr "Cards to take:"
+
+#: fool_cards.py:509
+msgid "Wait end of the game!"
+msgstr "Wait end of the game!"
+
+#: fool_cards.py:526
+msgid ":Player "
+msgstr ":Player "
+
+#: fool_cards.py:527
+msgid " come in your room!"
+msgstr " come in your room!"
+
+#: fool_cards.py:615
+msgid "Wait until "
+msgstr "Wait until "
+
+#: fool_cards.py:616
+msgid "take cards"
+msgstr " take cards"
+
+#: fool_cards.py:649
+msgid "You win"
+msgstr "You win"
+
+#: fool_cards.py:652
+msgid "You loose"
+msgstr "You loose"
+
+#: fool_cards.py:667
+#, fuzzy
+msgid "Drawn"
+msgstr "Draw"
+
+#: fool_cards.py:690
+msgid " leave your room! Wait other players...."
+msgstr " leave your room! Wait other players...."
+
+#: fool_cards.py:694
+msgid "Problems with connection! Connection_closed!"
+msgstr "Problems with connection! Connection_closed!"
+
+#: fool_cards.py:753
+msgid "Left"
+msgstr "Left"
+
+#: fool_cards.py:758
+msgid "Right"
+msgstr "Right"
+
+#: fool_cards.py:766
+msgid "Take"
+msgstr "Take"
+
+#: fool_cards.py:772 queen.py:77
+msgid "Ready"
+msgstr "Ready"
+
+#: FoolOnline.py:37
+msgid "Game Settings"
+msgstr "Game Settings"
+
+#: FoolOnline.py:43
+msgid "Your name:"
+msgstr "Your name:"
+
+#: FoolOnline.py:52
+msgid "Next"
+msgstr "Next"
+
+#: FoolOnline.py:58
+msgid "Quit"
+msgstr "Quit"
+
+#: FoolOnline.py:63
+msgid "Error"
+msgstr "Error"
+
+#: FoolOnline.py:68
+msgid "Ok"
+msgstr "Ok"
+
+#: FoolOnline.py:101 FoolOnline.py:114
+msgid ""
+"Connection error has occured!\n"
+"Try connect later..."
+msgstr "Connection error has occured!\n"
+"Try connect later..."
+
+#: FoolOnline.py:124
+msgid "Write correct name on english!"
+msgstr "Write correct name on english!"
+
+#: FoolOnline.py:152
+msgid "Game messenger"
+msgstr "Game messenger"
+
+#: FoolOnline.py:167
+msgid "Send"
+msgstr "Send"
+
+#: FoolOnline.py:222 menu.py:116
+msgid "Fool-online"
+msgstr "Fool-online"
+
+#: FoolOnline.py:238
+msgid "Info:"
+msgstr "Info:"
+
+#: menu.py:33
+msgid "Exit"
+msgstr "Exit"
+
+#: menu.py:62 menu.py:116
+msgid "Blackjack"
+msgstr "Blackjack"
+
+#: menu.py:82 menu.py:116
+msgid "Queen"
+msgstr "Queen"
+
+#: menu.py:113
+msgid "Cards Games"
+msgstr "Cards Games"
+
+#: menu.py:119
+msgid "Games"
+msgstr "Games"
 

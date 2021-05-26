@@ -99,7 +99,9 @@ def start_app():
     else:
         translation = 'eng'
 
+
     TRANSLATION_ROOT = os.path.join(os.path.dirname(__file__), "..", 'localization')
+    #print(TRANSLATION_ROOT)
     language = gettext.translation(
         domain='CardGames',
         localedir=TRANSLATION_ROOT,

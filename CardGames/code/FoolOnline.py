@@ -7,19 +7,19 @@ import json
 import string
 import os
 
+from os.path import join
 from functools import partial
 from threading import Thread
 from queue import Queue
 
+
 from .fool_cards import OnlineReferee, FoolDeck, Player, Table, ScoreTable
-from os.path import join
-
-RESOURSES_DIR = os.path.join(os.path.dirname(__file__), "..", 'resources')
-
+RESOURSES_DIR = 'resourses/cards'
 EMPTY_CARD = 'empty.png'
 BACK_CARD = 'back.png'
 STATUS = 'Attacked'
 
+RESOURSES_DIR = os.path.join(os.path.dirname(__file__), "..", 'resources')
 
 class ConnectionFinder():
     """Connect to server and establish connection with game and chat."""
@@ -34,13 +34,13 @@ class ConnectionFinder():
         """
         self.root = main
         self.main = tk.Toplevel(main)
-        self.main.title("Game Settings")
+        self.main.title(_("Game Settings"))
         self.settings = settings
         self.game_server = game_server
         self.chat_server = chat_server
 
         self.error = False
-        name_lab = tk.Label(self.main, text='Your name:')
+        name_lab = tk.Label(self.main, text=_('Your name:'))
         name_lab.grid(row=0, column=0)
 
         self.name = tk.StringVar()
@@ -49,23 +49,23 @@ class ConnectionFinder():
 
         self.num_players = 2
         next_btn = tk.Button(self.main,
-                             text='Next',
+                             text=_('Next'),
                              command=partial(self.findConnection,
                                              self.num_players,
                                              self.name))
 
         next_btn.grid(row=1, column=1)
-        tk.Button(self.main, text="Quit",
+        tk.Button(self.main, text=_("Quit"),
                   command=lambda: self.main.quit()).grid(row=1, column=0)
 
     def __get_errro_msg(self, msg):
         root = tk.Toplevel(self.main)
-        root.title("Error")
+        root.title(_("Error"))
 
         lab = tk.Label(root, text=msg)
         lab.pack()
 
-        btn = tk.Button(root, text='Ok',
+        btn = tk.Button(root, text=_('Ok'),
                         command=lambda root=root: self.main.destroy())
         btn.pack()
 
@@ -98,7 +98,7 @@ class ConnectionFinder():
 
                 self.error = True
                 self.__get_errro_msg(
-                    "Connection error has occured!\nTry connect later..."
+                    _("Connection error has occured!\nTry connect later...")
                 )
 
 
@@ -111,7 +111,7 @@ class ConnectionFinder():
                 print("error:", e)
                 self.error = True
                 self.__get_errro_msg(
-                    "Connection error has occured!\nTry connect later..."
+                    _("Connection error has occured!\nTry connect later...")
                 )
 
 
@@ -119,7 +119,9 @@ class ConnectionFinder():
 
         is_asci = isAscii(player_name.get())
         if not is_asci or not len(player_name.get()):
-            warning = tk.Label(self.main, text='Write correct name on english!')
+            warning = tk.Label(
+                self.main,
+                text=_('Write correct name on english!'))
             warning.grid(row=2,column=0, columnspan=2)
             return
 
@@ -147,7 +149,7 @@ class ChatWindow(tk.Toplevel):
     def __init__(self, main, ws, name, queue, listen_thread=None):
         """Set up settings for chat window."""
         super().__init__(main)
-        self.title("Game messenger")
+        self.title(_("Game messenger"))
 
         self.ws = ws
         self.name = name
@@ -162,7 +164,7 @@ class ChatWindow(tk.Toplevel):
         self.entry = tk.Entry(self, textvariable=self.textVar)
         self.entry.grid(row=1, column=0)
 
-        self.send_btn = tk.Button(self, text='Send', command=self.send)
+        self.send_btn = tk.Button(self, text=_('Send'), command=self.send)
         self.send_btn.grid(row=1, column=1)
 
         self.updateGUI()
@@ -217,10 +219,8 @@ class FoolGame(tk.Toplevel):
         super().__init__(main)
 
         self.main = main
-        self.title("Fool-online")
-        #self.geometry("1600x1000")
-        self.geometry("{0}x{1}+0+0".format(main.winfo_screenwidth(), main.winfo_screenheight()))
-        #self.attributes('-fullscreen', True)
+        self.title(_("Fool-online"))
+        self.geometry("1600x1000")
         self.protocol("WM_DELETE_WINDOW", self.destroy)
         self.name = name
         self.ws_game = ws_game
@@ -235,7 +235,7 @@ class FoolGame(tk.Toplevel):
         self.info_frame = tk.Frame(self)
         self.info_frame.place(relx=0.5, rely=0.05)
         self.info_s = tk.StringVar()
-        self.info = tk.Label(self.info_frame, text="Info:")
+        self.info = tk.Label(self.info_frame, text=_("Info:"))
         self.info_var = tk.Label(self.info_frame, textvariable=self.info_s)
         self.info.grid(row=0, column=0)
         self.info_var.grid(row=0, column=1)
@@ -244,7 +244,11 @@ class FoolGame(tk.Toplevel):
         self.referee = OnlineReferee(ws_game, ws_chat)
         self.referee.info = self.info_s
 
-        self.deck = FoolDeck(self, join(RESOURSES_DIR, 'cards'), 1, self.referee)
+        self.deck = FoolDeck(self,
+                            join(RESOURSES_DIR, 'cards'),
+                            1,
+                            self.referee)
+
         self.referee.deck = self.deck
 
         self.player = Player(self, 2, self.name, self.referee)
@@ -347,8 +351,8 @@ class Main():
         self.main = main
         self.settings = {}
         self.server_addr = "polar-depths-25815.herokuapp.com"
-        if len(sys.argv) > 1:
-            self.server_addr = str(sys.argv[1])
+        #if len(sys.argv) > 1:
+        #    self.server_addr = str(sys.argv[1])
         self.server_game_addr = "ws://{}/game".format(self.server_addr)
         self.server_chat_addr = "ws://{}/chat".format(self.server_addr)
 

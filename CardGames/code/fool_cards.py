@@ -5,6 +5,7 @@ import numpy as np
 import tkinter.font as font
 import os
 
+from os.path import join
 from PIL import Image, ImageTk
 from os.path import join
 from playsound import playsound
@@ -284,7 +285,7 @@ class Referee(object):
                 addition()
                 return card_type, card_value
             else:
-                self.info.set("Not allowed operation")
+                self.info.set(_("Not allowed operation"))
                 return None
 
     def response(self, r_card, a_card):
@@ -327,16 +328,16 @@ class Referee(object):
 
     def set_atack_player(self):
         self.player.status = 'attack'
-        self.info.set("You attack!")
+        self.info.set(_("You attack!"))
 
     def set_response_player(self):
         self.player.status = 'response'
-        self.info.set("You response!")
+        self.info.set(_("You response!"))
 
     def set_addition_player(self):
         self.player.status = 'addition'
         self.player.ready['state'] = tk.ACTIVE
-        self.info.set("You add!")
+        self.info.set(_("You add!"))
 
     def make_cards_active(self):
         for card in self.table.a_cards.values():
@@ -468,12 +469,12 @@ class OnlineReferee(Referee):
                 'sender': self.player.name,
             }})
         self.game_socket.send(msg)
-        self.info.set("Wait other players!")
+        self.info.set(_("Wait other players!"))
         self.player.state = 'all_cards_taken'
 
     def get_card(self, event=None):
         if self.player.status == 'take_cards' and self.player.should_take > 0:
-            playsound('resourses/sounds/draw.wav')
+            playsound(os.path.join(RESOURSES_DIR, 'sounds/draw.wav'))
             msg = json.dumps({
                 'type': 'game_message',
                 'message': {
@@ -483,9 +484,7 @@ class OnlineReferee(Referee):
             })
             self.game_socket.send(msg)
             self.player.should_take -= 1
-            self.info.set(
-                "You should take {} cards".format(
-                    self.player.should_take))
+            self.info.set(_("Cards to take:") + str(self.player.should_take))
 
         if self.player.status == 'take_cards' and self.player.should_take == 0:
             self.__send_all_taken()
@@ -507,7 +506,7 @@ class OnlineReferee(Referee):
             }
         })
 
-        self.info.set("Wait end of the game!")
+        self.info.set(_("Wait end of the game!"))
         self.game_socket.send(msg)
 
     def __reset_all(self):
@@ -524,9 +523,9 @@ class OnlineReferee(Referee):
 
         if msg['action_type'] == 'player_addition':
 
-            self.info.set("[{}]:Player {} come in your room!".format(
-                msg['time'],
-                msg['sender']))
+            _message = str(msg['time']) + _(":Player ")
+            _message += str(msg['sender']) + _(" come in your room!")
+            self.info.set(_message)
 
         elif msg['action_type'] == 'users_scores':
             for key in msg['action_info']['scores'].keys():
@@ -553,7 +552,7 @@ class OnlineReferee(Referee):
                 self.player.take['state'] = tk.DISABLED
                 self.player.ready['state'] = tk.DISABLED
 
-            playsound(os.path.join(RESOURSES_DIR, '/sounds/draw.wav'))
+            playsound(os.path.join(RESOURSES_DIR, 'sounds/draw.wav'))
 
         elif msg['action_type'] == 'players':
 
@@ -593,7 +592,6 @@ class OnlineReferee(Referee):
 
             playsound(os.path.join(RESOURSES_DIR, 'sounds/draw.wav'))
 
-
         elif msg['action_type'] == 'player_take':
             playsound(os.path.join(RESOURSES_DIR, 'sounds/draw.wav'))
             self.table.reset()
@@ -612,12 +610,11 @@ class OnlineReferee(Referee):
                     self.player.should_take = int(
                         msg['action_info']['num_cards'])
                     self.info.set(
-                        "You should take {} cards".format(
-                            self.player.should_take))
+                        _("Cards to take:") + str(self.player.should_take))
             else:
-                self.info.set(
-                    "Wait until {} take cards".format(
-                        msg['action_info']['user_name']))
+                _m = _("Wait until ") + str(msg['action_info']['user_name'])
+                _m += _("take cards")
+                self.info.set(_m)
 
         elif msg['action_type'] == 'get_card':
             card_type = msg['action_info']['card_type']
@@ -649,10 +646,10 @@ class OnlineReferee(Referee):
         elif msg['action_type'] == 'user_loose':
 
             if self.player.name != msg['sender']:
-                info_msg = "You win "
+                info_msg = _("You win")
                 self.table.reset()
             else:
-                info_msg = "You loose"
+                info_msg = _("You loose")
 
             increase_scores = {}
             for key in self.score_table.players_scores_tk.keys():
@@ -667,7 +664,7 @@ class OnlineReferee(Referee):
 
         elif msg['action_type'] == 'drawn':
 
-            self.info.set("Drawn")
+            self.info.set(_("Drawn"))
 
         elif msg['action_type'] == 'repeat':
             ask_window = tk.Toplevel(self.player.master)
@@ -689,11 +686,12 @@ class OnlineReferee(Referee):
             user_name = msg['sender']
             print(self.score_table.players_scores_tk)
             self.score_table.deletePlayer(user_name)
-            self.info.set("User {} leave your room! Wait other players...."
-                          .format(msg['sender']))
+            _msg = "User " + str(msg['sender'])
+            _msg += _(" leave your room! Wait other players....")
+            self.info.set(_msg)
 
         elif msg['action_type'] == 'connection_closed':
-            self.info.set("Problems with connection! Connection_closed!")
+            self.info.set(_("Problems with connection! Connection_closed!"))
 
     def __send_ans(self, text, btn):
         msg = json.dumps({
@@ -752,12 +750,12 @@ class Player(tk.Frame):
 
         btn_font = font.Font(family='Helvetica', size=20, weight='bold')
 
-        self.left_button = tk.Button(parent, text="Left",
+        self.left_button = tk.Button(parent, text=_("Left"),
                                     font=btn_font, command=self.__left)
 
         self.left_button.place(relx=0.05, rely=0.85)
 
-        self.right_button =  tk.Button(parent, text="Right",
+        self.right_button =  tk.Button(parent, text=_("Right"),
                             font=btn_font, command=self.__right)
 
         self.right_button.place(relx=0.9, rely=0.85)
@@ -765,13 +763,13 @@ class Player(tk.Frame):
         self.player_buttons = tk.Frame(parent)
         self.player_buttons.place(relx=0.8, rely=0.68)
         self.take = tk.Button(self.player_buttons,
-                              text="Take",
+                              text=_("Take"),
                               state=tk.DISABLED,
                               command=self.referee.take)
 
         self.take.grid(row=0, column=0)
         self.ready = tk.Button(self.player_buttons,
-                               text='Ready',
+                               text=_('Ready'),
                                state=tk.DISABLED,
                                command=self.referee.ready)
         print('Debug:', self.ready['state'])
@@ -819,6 +817,7 @@ class Player(tk.Frame):
             pc = PlayerCard(self.visible_cards, card.card_id,
                             card.image, idx)
             if idx >= self.left and self.right>=idx:
+                print("should show")
                 pc.bind('<Button-1>', partial(self.action, pc))
                 pc.grid(row=0, column=idx-self.left)
 

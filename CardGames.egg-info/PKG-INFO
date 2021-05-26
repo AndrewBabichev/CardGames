@@ -1,0 +1,45 @@
+Metadata-Version: 2.1
+Name: CardGames
+Version: 0.1
+Summary: Bleckjack, Fool and Queen games
+Home-page: https://github.com/AndrewBabichev/CardGames
+Author: Eugene Kolmagorov and Andrew Babichev
+Author-email: appleforopad@inbox.ru
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Build Tools
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3 :: Only
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+
+# Карточные игры
+## Участники
+- Бабичев Андрей Юрьевич, 522 группа, https://github.com/AndrewBabichev
+- Колмагоров Евгений Игоревич, 517 группа, https://github.com/ekolmagorov
+
+## Постановка задачи
+Реализовать приложение для игры в различные карточные игры. Предполагается реализация трёх игр:
+- Блекджэк (21);
+- Дурак;
+- Пиковая дама;
+
+В игре дурак предполагается возможность онлайн-игры.
+
+## Интерфейс
+Интерфейс главного меню с выбором игры:
+
+![Main_Menu](resourses/Main_Menu.png "Main_Menu")
+
+Интерфейс одной из игр (блекджэк):
+
+![Game](resourses/Game.png "Game")
+
+

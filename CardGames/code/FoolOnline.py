@@ -1,7 +1,6 @@
 """Startup fool game."""
 
 import tkinter as tk
-import sys
 import websocket
 import json
 import string
@@ -20,6 +19,7 @@ BACK_CARD = 'back.png'
 STATUS = 'Attacked'
 
 RESOURSES_DIR = os.path.join(os.path.dirname(__file__), "..", 'resources')
+
 
 class ConnectionFinder():
     """Connect to server and establish connection with game and chat."""
@@ -69,7 +69,6 @@ class ConnectionFinder():
                         command=lambda root=root: self.main.destroy())
         btn.pack()
 
-
     def findConnection(self, num_players, player_name):
         """Send message about user addition."""
         params = {'num_players': num_players,
@@ -80,7 +79,6 @@ class ConnectionFinder():
                 if c not in string.ascii_letters:
                     return False
             return True
-
 
         def game_connect():
             try:
@@ -93,14 +91,12 @@ class ConnectionFinder():
 
             except Exception as e:
 
-
-                print("error")
+                print("error:", e)
 
                 self.error = True
                 self.__get_errro_msg(
                     _("Connection error has occured!\nTry connect later...")
                 )
-
 
         def chat_connect():
 
@@ -114,15 +110,12 @@ class ConnectionFinder():
                     _("Connection error has occured!\nTry connect later...")
                 )
 
-
-
-
         is_asci = isAscii(player_name.get())
         if not is_asci or not len(player_name.get()):
             warning = tk.Label(
                 self.main,
                 text=_('Write correct name on english!'))
-            warning.grid(row=2,column=0, columnspan=2)
+            warning.grid(row=2, column=0, columnspan=2)
             return
 
         ws_game = game_connect()
@@ -248,9 +241,9 @@ class FoolGame(tk.Toplevel):
         self.referee.info = self.info_s
 
         self.deck = FoolDeck(self,
-                            join(RESOURSES_DIR, 'cards'),
-                            1,
-                            self.referee)
+                             join(RESOURSES_DIR, 'cards'),
+                             1,
+                             self.referee)
 
         self.referee.deck = self.deck
 
@@ -279,7 +272,6 @@ class FoolGame(tk.Toplevel):
 
     def destroy(self):
         super().destroy()
-
 
         self.ws_game.close()
         self.ws_chat.close()
@@ -339,11 +331,11 @@ class App():
                 msg = json.loads(msg)
                 q.put(msg)
         q.put(json.dumps({
-                        'type':'game_message',
-                        'message':{
-                                'action_type':"connection_closed"
-                                }
-                        }))
+            'type': 'game_message',
+            'message': {
+                'action_type': "connection_closed"
+            }
+        }))
 
 
 class Main():
@@ -354,7 +346,7 @@ class Main():
         self.main = main
         self.settings = {}
         self.server_addr = "polar-depths-25815.herokuapp.com"
-        #if len(sys.argv) > 1:
+        # if len(sys.argv) > 1:
         #    self.server_addr = str(sys.argv[1])
         self.server_game_addr = "ws://{}/game".format(self.server_addr)
         self.server_chat_addr = "ws://{}/chat".format(self.server_addr)

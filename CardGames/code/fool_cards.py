@@ -7,7 +7,6 @@ import os
 
 from os.path import join
 from PIL import Image, ImageTk
-from os.path import join
 from playsound import playsound
 from functools import partial
 
@@ -18,6 +17,7 @@ PLAYERS_TYPES = ['atack', 'responce', 'addition']
 STATUS = 'Attacked'
 
 RESOURSES_DIR = os.path.join(os.path.dirname(__file__), "..", 'resources')
+
 
 class Card(tk.Button):
     """Special Button Class containins image for card and card type."""
@@ -243,7 +243,6 @@ class Referee(object):
     can change their states
     """
 
-
     def __init__(
             self,
             player=None,
@@ -393,7 +392,6 @@ class OnlineReferee(Referee):
                 return
             if not len(self.player.cards):
                 self.ready()
-
 
     def response(self, r_card, a_card):
         """add reponse card and send message about it."""
@@ -577,8 +575,6 @@ class OnlineReferee(Referee):
             r_card_type = msg['action_info']['r_card_type']
             r_card_value = msg['action_info']['r_card_value']
 
-            remain_cards = int(msg['action_info']['remain_cards'])
-
             r_card = self.deck.create_card(None, (r_card_type, r_card_value))
             a_card = self.table.a_cards[(a_card_type, a_card_value)]
 
@@ -725,7 +721,7 @@ class OnlineReferee(Referee):
             self.game_socket.close()
             self.chat_socket.close()
             btn.master.master.destroy()
-            #btn.master.master.quit()
+            # btn.master.master.quit()
 
 
 class Player(tk.Frame):
@@ -752,18 +748,18 @@ class Player(tk.Frame):
 
         self.num_visible = 8
 
-        self.left=0
+        self.left = 0
         self.right = self.num_visible
 
         btn_font = font.Font(family='Helvetica', size=20, weight='bold')
 
         self.left_button = tk.Button(parent, text=_("Left"),
-                                    font=btn_font, command=self.__left)
+                                     font=btn_font, command=self.__left)
 
         self.left_button.place(relx=0.05, rely=0.85)
 
-        self.right_button =  tk.Button(parent, text=_("Right"),
-                            font=btn_font, command=self.__right)
+        self.right_button = tk.Button(parent, text=_("Right"),
+                                      font=btn_font, command=self.__right)
 
         self.right_button.place(relx=0.9, rely=0.85)
         # -----------------------------------------------------------------------
@@ -783,19 +779,17 @@ class Player(tk.Frame):
         self.ready.grid(row=0, column=1)
         # -----------------------------------------------------------------------
 
-
     def __left(self):
-        if len(self.cards) > self.num_visible and self.left>0:
+        if len(self.cards) > self.num_visible and self.left > 0:
             self.left -= 1
             self.right -= 1
             self.update()
 
     def __right(self):
-        if len(self.cards) > self.num_visible and self.right<len(self.cards):
+        if len(self.cards) > self.num_visible and self.right < len(self.cards):
             self.left += 1
             self.right += 1
             self.update()
-
 
     def reset(self):
         for card in self.cards:
@@ -805,9 +799,8 @@ class Player(tk.Frame):
         self.should_take = 0
         self.status = None
         self.clicked_button = None
-        self.left=0
+        self.left = 0
         self.right = self.num_visible
-
 
     def take(self):
         self.referee.take()
@@ -816,14 +809,14 @@ class Player(tk.Frame):
         new_cards = []
         num_cards = len(self.cards)
         if num_cards <= self.num_visible:
-            self.left=0
+            self.left = 0
             self.right = self.num_visible
 
         for idx, card in enumerate(self.cards):
 
             pc = PlayerCard(self.visible_cards, card.card_id,
                             card.image, idx)
-            if idx >= self.left and self.right>=idx:
+            if idx >= self.left and self.right >= idx:
                 print("should show")
                 pc.bind('<Button-1>', partial(self.action, pc))
                 pc.grid(row=0, column=idx-self.left)

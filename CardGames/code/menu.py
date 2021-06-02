@@ -93,15 +93,14 @@ def init_queen(root):
 
 def start_app():
 
-
     if len(sys.argv) > 1:
         translation = sys.argv[1]
     else:
         translation = 'eng'
 
-
-    TRANSLATION_ROOT = os.path.join(os.path.dirname(__file__), "..", 'localization')
-    #print(TRANSLATION_ROOT)
+    TRANSLATION_ROOT = os.path.join(
+        os.path.dirname(__file__), "..", 'localization')
+    # print(TRANSLATION_ROOT)
     language = gettext.translation(
         domain='CardGames',
         localedir=TRANSLATION_ROOT,
@@ -121,6 +120,6 @@ def start_app():
                                   labelanchor='n')
 
     buttons_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-    menu = MainMenu(buttons_frame, app_frames, tmp_names)
+    MainMenu(buttons_frame, app_frames, tmp_names)
 
     root.mainloop()

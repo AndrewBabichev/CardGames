@@ -61,6 +61,7 @@ setup(
         'websockets==9.0.1',
         'vext.gi',
         'vext',
+        'sphinx',
     ],
     entry_points={
         "console_scripts":

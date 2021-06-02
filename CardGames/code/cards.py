@@ -7,14 +7,16 @@ import os
 from functools import partial
 from os.path import join
 
+
+RESOURSES_DIR = os.path.join(os.path.dirname(__file__), "..", 'resources')
+
 try:
     from playsound import playsound
+    playsound(join(RESOURSES_DIR, 'sounds/shuffle.wav'))
 except ImportError:
     def playsound(filename):
         """Empty functions if import fails."""
         pass
-
-RESOURSES_DIR = os.path.join(os.path.dirname(__file__), "..", 'resources')
 
 
 class Cards(tk.Frame):
@@ -188,7 +190,7 @@ class Deck(Cards):
             self.update()
 
         elif self.expand and self.deck_cards_ids.size > 0:
-            playsound('./resourses/sounds/draw.wav')
+            playsound(join(RESOURSES_DIR, 'sounds/draw.wav'))
             if card_id is None:
                 card_id = np.random.choice(self.deck_cards_ids, (1))
             self.deck_cards_ids = np.setdiff1d(self.deck_cards_ids, card_id)

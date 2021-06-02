@@ -9,14 +9,15 @@ from tkinter import messagebox
 from .cards import Hand, Deck
 from os.path import join
 
+RESOURSES_DIR = os.path.join(os.path.dirname(__file__), "..", 'resources')
+
 try:
     from playsound import playsound
+    playsound(join(RESOURSES_DIR, 'sounds/shuffle.wav'))
 except ImportError:
     def playsound(filename):
         """Empty functions if import fails."""
         pass
-
-RESOURSES_DIR = os.path.join(os.path.dirname(__file__), "..", 'resources')
 
 
 class Queen_Hand(Hand):

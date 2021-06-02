@@ -1,9 +1,21 @@
 """Module for blackjack card game."""
 
+import os
 import tkinter as tk
 
 from .cards import Deck
 from tkinter import messagebox
+from os.path import join
+
+RESOURSES_DIR = os.path.join(os.path.dirname(__file__), "..", 'resources')
+
+try:
+    from playsound import playsound
+    playsound(join(RESOURSES_DIR, 'sounds/shuffle.wav'))
+except ImportError:
+    def playsound(filename):
+        """Empty functions if import fails."""
+        pass
 
 
 class Blackjack(Deck):

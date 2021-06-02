@@ -283,17 +283,18 @@ class Referee(object):
             self.table['state'] = tk.DISABLED
             self.player.update()
 
-        card_type, card_value = card.card_id
+        card_type = card.card_id[0]
+        card_value = card.card_id[1]
 
         if self.player.status == 'attack':
             addition()
             self.player.status = 'addition'
-            print(self.player.ready)
             self.player.ready['state'] = tk.ACTIVE
             return card_type, card_value
 
         elif self.player.status == 'addition':
-            if card.card_id[1] in self.table.cards_values:
+            if card_value in self.table.cards_values:
+                print(card_value, self.table.cards_values)
                 addition()
                 return card_type, card_value
             else:
@@ -314,7 +315,7 @@ class Referee(object):
             royal = r_card.card_id[0] == self.royal_card[0] and \
                 a_card.card_id[0] != self.royal_card[0]
 
-            print("response:", less, royal)
+            #print("response:", less, royal)
 
             return royal or less
 
@@ -384,7 +385,8 @@ class OnlineReferee(Referee):
 
     def add_card_on_table(self, card):
         """Add card on table and send message about it."""
-        if not self.remain_cards:
+        #print(self.remain_cards)
+        if self.remain_cards == 0:
             return
 
         card = Referee.add_card_on_table(self, card)
@@ -562,7 +564,7 @@ class OnlineReferee(Referee):
             self.score_table.update(scores)
 
         elif msg['action_type'] == 'card_addition':
-            print('in addition')
+            #print('in addition')
             card_type = msg['action_info']['card_type']
             card_value = msg['action_info']['card_value']
             sender_name = msg['sender']
@@ -592,13 +594,13 @@ class OnlineReferee(Referee):
 
         elif msg['action_type'] == 'card_response':
 
-            a_card_type = msg['action_info']['a_card_type']
-            a_card_value = msg['action_info']['a_card_value']
+            a_card_type = int(msg['action_info']['a_card_type'])
+            a_card_value = int(msg['action_info']['a_card_value'])
 
-            r_card_type = msg['action_info']['r_card_type']
-            r_card_value = msg['action_info']['r_card_value']
+            r_card_type = int(msg['action_info']['r_card_type'])
+            r_card_value = int(msg['action_info']['r_card_value'])
 
-            self.remain_cards = msg['action_info']['remain_cards']
+            self.remain_cards = int(msg['action_info']['remain_cards'])
             r_card = self.deck.create_card(None, (r_card_type, r_card_value))
             a_card = self.table.a_cards[(a_card_type, a_card_value)]
 
@@ -665,7 +667,7 @@ class OnlineReferee(Referee):
             self.deck.update()
 
         elif msg['action_type'] == 'empty_deck':
-            print('empty_deck')
+            #print('empty_deck')
             self.deck.destroy()
 
         elif msg['action_type'] == 'user_loose':
@@ -711,7 +713,7 @@ class OnlineReferee(Referee):
 
         elif msg['action_type'] == 'disconnect_message':
             user_name = msg['sender']
-            print(self.score_table.players_scores_tk)
+            #print(self.score_table.players_scores_tk)
             self.score_table.deletePlayer(user_name)
             _msg = "User " + str(msg['sender'])
             _msg += _(" leave your room! Wait other players....")
@@ -800,7 +802,7 @@ class Player(tk.Frame):
                                text=_('Ready'),
                                state=tk.DISABLED,
                                command=self.referee.ready)
-        print('Debug:', self.ready['state'])
+        #print('Debug:', self.ready['state'])
         self.ready.grid(row=0, column=1)
         # -----------------------------------------------------------------------
 
@@ -845,7 +847,6 @@ class Player(tk.Frame):
             pc = PlayerCard(self.visible_cards, card.card_id,
                             card.image, idx)
             if idx >= self.left and self.right >= idx:
-                print("should show")
                 pc.bind('<Button-1>', partial(self.action, pc))
                 pc.grid(row=0, column=idx-self.left)
 
@@ -893,7 +894,7 @@ class Player(tk.Frame):
         else:
 
             if self.clicked_button in self.cards:
-                print("In cards")
+
                 if btn == self.referee.table:
                     self.referee.add_card_on_table(self.clicked_button)
 

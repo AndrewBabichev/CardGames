@@ -184,7 +184,6 @@ class ChatWindow(tk.Toplevel):
 
     def send(self):
         """Send message on server."""
-
         def send_message():
             self.ws.send(json.dumps({
                 'type': 'chat_message',

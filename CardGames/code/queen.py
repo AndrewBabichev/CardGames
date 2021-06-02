@@ -5,11 +5,16 @@ import tkinter as tk
 import os
 
 from functools import partial
-from playsound import playsound
 from tkinter import messagebox
-
 from .cards import Hand, Deck
 from os.path import join
+
+try:
+    from playsound import playsound
+except ImportError:
+    def playsound(filename):
+        """Empty functions if import fails."""
+        pass
 
 RESOURSES_DIR = os.path.join(os.path.dirname(__file__), "..", 'resources')
 

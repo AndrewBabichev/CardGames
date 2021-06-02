@@ -6,7 +6,13 @@ import os
 
 from functools import partial
 from os.path import join
-from playsound import playsound
+
+try:
+    from playsound import playsound
+except ImportError:
+    def playsound(filename):
+        """Empty functions if import fails."""
+        pass
 
 RESOURSES_DIR = os.path.join(os.path.dirname(__file__), "..", 'resources')
 

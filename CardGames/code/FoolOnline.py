@@ -163,6 +163,7 @@ class ChatWindow(tk.Toplevel):
         self.updateGUI()
 
     def destroy(self):
+        """Destroy chat window."""
         super().destroy()
         self.ws.close()
 
@@ -271,6 +272,7 @@ class FoolGame(tk.Toplevel):
         self.after(200, self.updateGUI)
 
     def destroy(self):
+        """Destroy game."""
         super().destroy()
 
         self.ws_game.close()

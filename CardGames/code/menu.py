@@ -92,7 +92,7 @@ def init_queen(root):
 
 
 def start_app():
-
+    """Launch tkinter mainloop."""
     if len(sys.argv) > 1:
         translation = sys.argv[1]
     else:

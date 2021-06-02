@@ -315,8 +315,6 @@ class Referee(object):
             royal = r_card.card_id[0] == self.royal_card[0] and \
                 a_card.card_id[0] != self.royal_card[0]
 
-            #print("response:", less, royal)
-
             return royal or less
 
         is_response = can_response(r_card, a_card)
@@ -385,7 +383,6 @@ class OnlineReferee(Referee):
 
     def add_card_on_table(self, card):
         """Add card on table and send message about it."""
-        #print(self.remain_cards)
         if self.remain_cards == 0:
             return
 
@@ -483,6 +480,7 @@ class OnlineReferee(Referee):
                 }
             }
         })
+
         self.player.ready['state'] = tk.DISABLED
         self.player.state = 'wait'
         self.game_socket.send(msg)
@@ -564,7 +562,6 @@ class OnlineReferee(Referee):
             self.score_table.update(scores)
 
         elif msg['action_type'] == 'card_addition':
-            #print('in addition')
             card_type = msg['action_info']['card_type']
             card_value = msg['action_info']['card_value']
             sender_name = msg['sender']
@@ -627,6 +624,7 @@ class OnlineReferee(Referee):
             self.table.reset()
 
         elif msg['action_type'] == 'take_cards':
+            self.table.reset()
             self.player.ready['state'] = tk.DISABLED
             self.player.take['state'] = tk.DISABLED
             if msg['action_info']['user_name'] == self.player.name:
@@ -667,7 +665,6 @@ class OnlineReferee(Referee):
             self.deck.update()
 
         elif msg['action_type'] == 'empty_deck':
-            #print('empty_deck')
             self.deck.destroy()
 
         elif msg['action_type'] == 'user_loose':
@@ -713,7 +710,6 @@ class OnlineReferee(Referee):
 
         elif msg['action_type'] == 'disconnect_message':
             user_name = msg['sender']
-            #print(self.score_table.players_scores_tk)
             self.score_table.deletePlayer(user_name)
             _msg = "User " + str(msg['sender'])
             _msg += _(" leave your room! Wait other players....")
@@ -802,7 +798,6 @@ class Player(tk.Frame):
                                text=_('Ready'),
                                state=tk.DISABLED,
                                command=self.referee.ready)
-        #print('Debug:', self.ready['state'])
         self.ready.grid(row=0, column=1)
         # -----------------------------------------------------------------------
 

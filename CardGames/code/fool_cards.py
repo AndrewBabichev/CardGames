@@ -286,7 +286,6 @@ class Referee(object):
         card_type = card.card_id[0]
         card_value = card.card_id[1]
 
-        print("values:", self.table.cards_values)
         if self.player.status == 'attack':
             addition()
             self.player.status = 'addition'
@@ -295,7 +294,6 @@ class Referee(object):
 
         elif self.player.status == 'addition':
             if card_value in self.table.cards_values:
-                print(card_value, self.table.cards_values)
                 addition()
                 return card_type, card_value
             else:

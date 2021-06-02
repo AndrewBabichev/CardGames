@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-05-26 23:58+0300\n"
+"POT-Creation-Date: 2021-06-02 19:24+0300\n"
 "PO-Revision-Date: 2021-05-23 21:58+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en_US\n"
@@ -18,171 +18,209 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: blackjack.py:52
+#: CardGames/code/FoolOnline.py:37
+msgid "Game Settings"
+msgstr "Game Settings"
+
+#: CardGames/code/FoolOnline.py:43
+msgid "Your name:"
+msgstr "Your name:"
+
+#: CardGames/code/FoolOnline.py:52
+msgid "Next"
+msgstr "Next"
+
+#: CardGames/code/FoolOnline.py:58
+msgid "Quit"
+msgstr "Quit"
+
+#: CardGames/code/FoolOnline.py:63
+msgid "Error"
+msgstr "Error"
+
+#: CardGames/code/FoolOnline.py:68
+msgid "Ok"
+msgstr "Ok"
+
+#: CardGames/code/FoolOnline.py:98 CardGames/code/FoolOnline.py:110
+msgid ""
+"Connection error has occured!\n"
+"Try connect later..."
+msgstr ""
+"Connection error has occured!\n"
+"Try connect later..."
+
+#: CardGames/code/FoolOnline.py:117
+msgid "Write correct name on english!"
+msgstr "Write correct name on english!"
+
+#: CardGames/code/FoolOnline.py:145
+msgid "Game messenger"
+msgstr "Game messenger"
+
+#: CardGames/code/FoolOnline.py:160
+msgid "Send"
+msgstr "Send"
+
+#: CardGames/code/FoolOnline.py:216 CardGames/code/menu.py:115
+msgid "Fool-online"
+msgstr "Fool-online"
+
+#: CardGames/code/FoolOnline.py:235
+msgid "Info:"
+msgstr "Info:"
+
+#: CardGames/code/blackjack.py:55
 msgid "Stand"
 msgstr "Stand"
 
-#: blackjack.py:69 blackjack.py:87 queen.py:162
+#: CardGames/code/blackjack.py:72 CardGames/code/blackjack.py:90
+#: CardGames/code/queen.py:169
 msgid "Lose"
 msgstr "Lose"
 
-#: blackjack.py:83 queen.py:152
+#: CardGames/code/blackjack.py:86 CardGames/code/queen.py:159
 msgid "Win"
 msgstr "Win"
 
-#: blackjack.py:85
+#: CardGames/code/blackjack.py:88
 msgid "Draw"
 msgstr "Draw"
 
-#: fool_cards.py:288
+#: CardGames/code/fool_cards.py:299
 msgid "Not allowed operation"
 msgstr "Not allowed operation"
 
-#: fool_cards.py:331
+#: CardGames/code/fool_cards.py:342
 msgid "You attack!"
 msgstr "You attack!"
 
-#: fool_cards.py:335
+#: CardGames/code/fool_cards.py:347
 msgid "You response!"
 msgstr "You response!"
 
-#: fool_cards.py:340
+#: CardGames/code/fool_cards.py:353
 msgid "You add!"
 msgstr "You add!"
 
-#: fool_cards.py:472
+#: CardGames/code/fool_cards.py:492
 msgid "Wait other players!"
 msgstr "Wait other players!"
 
-#: fool_cards.py:487 fool_cards.py:613
+#: CardGames/code/fool_cards.py:508 CardGames/code/fool_cards.py:633
 msgid "Cards to take:"
 msgstr "Cards to take:"
 
-#: fool_cards.py:509
+#: CardGames/code/fool_cards.py:530
 msgid "Wait end of the game!"
 msgstr "Wait end of the game!"
 
-#: fool_cards.py:526
+#: CardGames/code/fool_cards.py:545
 msgid ":Player "
 msgstr ":Player "
 
-#: fool_cards.py:527
+#: CardGames/code/fool_cards.py:546
 msgid " come in your room!"
 msgstr " come in your room!"
 
-#: fool_cards.py:615
+#: CardGames/code/fool_cards.py:635
 msgid "Wait until "
 msgstr "Wait until "
 
-#: fool_cards.py:616
+#: CardGames/code/fool_cards.py:636
 msgid "take cards"
 msgstr " take cards"
 
-#: fool_cards.py:649
+#: CardGames/code/fool_cards.py:669
 msgid "You win"
 msgstr "You win"
 
-#: fool_cards.py:652
+#: CardGames/code/fool_cards.py:672
 msgid "You loose"
 msgstr "You loose"
 
-#: fool_cards.py:667
+#: CardGames/code/fool_cards.py:687
 #, fuzzy
 msgid "Drawn"
 msgstr "Draw"
 
-#: fool_cards.py:690
+#: CardGames/code/fool_cards.py:691
+msgid "Repeat?"
+msgstr ""
+
+#: CardGames/code/fool_cards.py:692
+msgid "Would you like to continue game?"
+msgstr ""
+
+#: CardGames/code/fool_cards.py:697
+msgid "No"
+msgstr ""
+
+#: CardGames/code/fool_cards.py:700
+msgid "Yes"
+msgstr ""
+
+#: CardGames/code/fool_cards.py:712
 msgid " leave your room! Wait other players...."
 msgstr " leave your room! Wait other players...."
 
-#: fool_cards.py:694
+#: CardGames/code/fool_cards.py:716
 msgid "Problems with connection! Connection_closed!"
 msgstr "Problems with connection! Connection_closed!"
 
-#: fool_cards.py:753
+#: CardGames/code/fool_cards.py:776
 msgid "Left"
 msgstr "Left"
 
-#: fool_cards.py:758
+#: CardGames/code/fool_cards.py:781
 msgid "Right"
 msgstr "Right"
 
-#: fool_cards.py:766
+#: CardGames/code/fool_cards.py:789
 msgid "Take"
 msgstr "Take"
 
-#: fool_cards.py:772 queen.py:77
+#: CardGames/code/fool_cards.py:795 CardGames/code/queen.py:87
 msgid "Ready"
 msgstr "Ready"
 
-#: FoolOnline.py:37
-msgid "Game Settings"
-msgstr "Game Settings"
-
-#: FoolOnline.py:43
-msgid "Your name:"
-msgstr "Your name:"
-
-#: FoolOnline.py:52
-msgid "Next"
-msgstr "Next"
-
-#: FoolOnline.py:58
-msgid "Quit"
-msgstr "Quit"
-
-#: FoolOnline.py:63
-msgid "Error"
-msgstr "Error"
-
-#: FoolOnline.py:68
-msgid "Ok"
-msgstr "Ok"
-
-#: FoolOnline.py:101 FoolOnline.py:114
-msgid ""
-"Connection error has occured!\n"
-"Try connect later..."
-msgstr "Connection error has occured!\n"
-"Try connect later..."
-
-#: FoolOnline.py:124
-msgid "Write correct name on english!"
-msgstr "Write correct name on english!"
-
-#: FoolOnline.py:152
-msgid "Game messenger"
-msgstr "Game messenger"
-
-#: FoolOnline.py:167
-msgid "Send"
-msgstr "Send"
-
-#: FoolOnline.py:222 menu.py:116
-msgid "Fool-online"
-msgstr "Fool-online"
-
-#: FoolOnline.py:238
-msgid "Info:"
-msgstr "Info:"
-
-#: menu.py:33
+#: CardGames/code/menu.py:33
 msgid "Exit"
 msgstr "Exit"
 
-#: menu.py:62 menu.py:116
+#: CardGames/code/menu.py:62 CardGames/code/menu.py:115
 msgid "Blackjack"
 msgstr "Blackjack"
 
-#: menu.py:82 menu.py:116
+#: CardGames/code/menu.py:82 CardGames/code/menu.py:115
 msgid "Queen"
 msgstr "Queen"
 
-#: menu.py:113
+#: CardGames/code/menu.py:112
 msgid "Cards Games"
 msgstr "Cards Games"
 
-#: menu.py:119
+#: CardGames/code/menu.py:118
 msgid "Games"
 msgstr "Games"
+
+#: CardGames/code/fool_cards.py:697
+msgid "No"
+msgstr "No"
+
+#: CardGames/code/fool_cards.py:700
+msgid "Yes"
+msgstr "Yes"
+
+#: CardGames/code/fool_cards.py:687
+msgid "Drawn"
+msgstr "Drawn"
+
+#: CardGames/code/fool_cards.py:691
+msgid "Repeat?"
+msgstr "Repeat?"
+
+#: CardGames/code/fool_cards.py:692
+msgid "Would you like to continue game?"
+msgstr "Would you like to continue game?"
 

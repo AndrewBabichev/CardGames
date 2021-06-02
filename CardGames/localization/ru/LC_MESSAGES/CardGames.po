@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-05-26 23:58+0300\n"
+"POT-Creation-Date: 2021-06-02 19:24+0300\n"
 "PO-Revision-Date: 2021-05-23 21:58+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -19,194 +19,189 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: blackjack.py:52
+#: CardGames/code/FoolOnline.py:37
+msgid "Game Settings"
+msgstr "Настройки игры"
+
+#: CardGames/code/FoolOnline.py:43
+msgid "Your name:"
+msgstr "Ваше имя:"
+
+#: CardGames/code/FoolOnline.py:52
+msgid "Next"
+msgstr "Далее"
+
+#: CardGames/code/FoolOnline.py:58
+msgid "Quit"
+msgstr "Выйти"
+
+#: CardGames/code/FoolOnline.py:63
+msgid "Error"
+msgstr "Ошибка"
+
+#: CardGames/code/FoolOnline.py:68
+msgid "Ok"
+msgstr "Ок"
+
+#: CardGames/code/FoolOnline.py:98 CardGames/code/FoolOnline.py:110
+msgid ""
+"Connection error has occured!\n"
+"Try connect later..."
+msgstr ""
+"Произошла ошибка соединения!\n"
+"Попробуйте, пожалуйста, позже..."
+
+#: CardGames/code/FoolOnline.py:117
+msgid "Write correct name on english!"
+msgstr "Напишите имя на английском!"
+
+#: CardGames/code/FoolOnline.py:145
+msgid "Game messenger"
+msgstr "Игровой чат"
+
+#: CardGames/code/FoolOnline.py:160
+msgid "Send"
+msgstr "Отправить"
+
+#: CardGames/code/FoolOnline.py:216 CardGames/code/menu.py:115
+msgid "Fool-online"
+msgstr "Дурак-онлайн"
+
+#: CardGames/code/FoolOnline.py:235
+msgid "Info:"
+msgstr "Информация:"
+
+#: CardGames/code/blackjack.py:55
 msgid "Stand"
 msgstr "Хватит"
 
-#: blackjack.py:69 blackjack.py:87 queen.py:162
+#: CardGames/code/blackjack.py:72 CardGames/code/blackjack.py:90
+#: CardGames/code/queen.py:169
 msgid "Lose"
 msgstr "Поражение"
 
-#: blackjack.py:83 queen.py:152
+#: CardGames/code/blackjack.py:86 CardGames/code/queen.py:159
 msgid "Win"
 msgstr "Победа"
 
-#: blackjack.py:85
+#: CardGames/code/blackjack.py:88
 msgid "Draw"
 msgstr "Ничья"
 
-#: fool_cards.py:672
-msgid "Draw"
-msgstr "Ничья"
-
-#: fool_cards.py:672
-msgid "Draw"
-msgstr "Ничья"
-
-#: fool_cards.py:676
-msgid "Repeat?"
-msgstr "Ещё раз?"
-
-#: fool_cards.py:677
-msgid "Would you like to continue game?"
-msgstr "Хотете сыграть ещё раз?"
-
-#: fool_cards.py:288
+#: CardGames/code/fool_cards.py:299
 msgid "Not allowed operation"
 msgstr "Неразрешенная операция"
 
-#: fool_cards.py:331
+#: CardGames/code/fool_cards.py:342
 msgid "You attack!"
 msgstr "Ваш ход!"
 
-#: fool_cards.py:335
+#: CardGames/code/fool_cards.py:347
 msgid "You response!"
 msgstr "Вы бьете!"
 
-#: fool_cards.py:340
+#: CardGames/code/fool_cards.py:353
 msgid "You add!"
 msgstr "Вы докидываете"
 
-#: fool_cards.py:472
+#: CardGames/code/fool_cards.py:492
 msgid "Wait other players!"
 msgstr "Дождитесь других игроков!"
 
-#: fool_cards.py:487 fool_cards.py:613
+#: CardGames/code/fool_cards.py:508 CardGames/code/fool_cards.py:633
 msgid "Cards to take:"
 msgstr "Необходимо взять карт:"
 
-#: fool_cards.py:509
+#: CardGames/code/fool_cards.py:530
 msgid "Wait end of the game!"
 msgstr "Дождитесь конца игры!"
 
-#: fool_cards.py:526
+#: CardGames/code/fool_cards.py:545
 msgid ":Player "
 msgstr ": Игрок "
 
-#: fool_cards.py:527
+#: CardGames/code/fool_cards.py:546
 msgid " come in your room!"
 msgstr " вошел в вашу комнату!"
 
-#: fool_cards.py:615
+#: CardGames/code/fool_cards.py:635
 msgid "Wait until "
 msgstr "Дождитесь пока "
 
-#: fool_cards.py:616
+#: CardGames/code/fool_cards.py:636
 msgid "take cards"
 msgstr " возьмет карты"
 
-#: fool_cards.py:649
+#: CardGames/code/fool_cards.py:669
 msgid "You win"
 msgstr "Вы победили"
 
-#: fool_cards.py:652
+#: CardGames/code/fool_cards.py:672
 msgid "You loose"
 msgstr "Вы проиграли"
 
-#: fool_cards.py:667
+#: CardGames/code/fool_cards.py:687
 #, fuzzy
 msgid "Drawn"
 msgstr "Ничья"
 
-#: fool_cards.py:690
-msgid " leave your room! Wait other players...."
-msgstr " покинул вашу команту! Дождитесь других игроков..."
+#: CardGames/code/fool_cards.py:691
+msgid "Repeat?"
+msgstr "Ещё раз?"
 
-#: fool_cards.py:694
-msgid "Problems with connection! Connection_closed!"
-msgstr "Проблемы с соединением! Соединение потеряно!"
+#: CardGames/code/fool_cards.py:692
+msgid "Would you like to continue game?"
+msgstr "Хотете сыграть ещё раз?"
 
-#: fool_cards.py:753
-msgid "Left"
-msgstr "Влево"
+#: CardGames/code/fool_cards.py:697
+msgid "No"
+msgstr "Нет"
 
-#: fool_cards.py:758
-msgid "Right"
-msgstr "Вправо"
-
-#: fool_cards.py:766
-msgid "Take"
-msgstr "Взять"
-
-#: fool_cards.py:772 queen.py:77
-msgid "Ready"
-msgstr "Готов"
-
-#: FoolOnline.py:37
-msgid "Game Settings"
-msgstr "Настройки игры"
-
-#: FoolOnline.py:43
-msgid "Your name:"
-msgstr "Ваше имя:"
-
-#: FoolOnline.py:52
-msgid "Next"
-msgstr "Далее"
-
-#: FoolOnline.py:58
-msgid "Quit"
-msgstr "Выйти"
-
-#: FoolOnline.py:63
-msgid "Error"
-msgstr "Ошибка"
-
-#: FoolOnline.py:68
-msgid "Ok"
-msgstr "Ок"
-
-#: FoolOnline.py:101 FoolOnline.py:114
-msgid ""
-"Connection error has occured!\n"
-"Try connect later..."
-msgstr "Произошла ошибка соединения!\n"
-"Попробуйте, пожалуйста, позже..."
-
-#: FoolOnline.py:124
-msgid "Write correct name on english!"
-msgstr "Напишите имя на английском!"
-
-#: FoolOnline.py:152
-msgid "Game messenger"
-msgstr "Игровой чат"
-
-#: FoolOnline.py:167
-msgid "Send"
-msgstr "Отправить"
-
-#: FoolOnline.py:222 menu.py:116
-msgid "Fool-online"
-msgstr "Дурак-онлайн"
-
-#: FoolOnline.py:238
-msgid "Info:"
-msgstr "Информация:"
-
-#: menu.py:33
-msgid "Exit"
-msgstr "Выйти"
-
-#: menu.py:62 menu.py:116
-msgid "Blackjack"
-msgstr "Блекджек"
-
-#: menu.py:82 menu.py:116
-msgid "Queen"
-msgstr "Пиковая Дама"
-
-#: menu.py:113
-msgid "Cards Games"
-msgstr "Карточные игры"
-
-#: menu.py:119
-msgid "Games"
-msgstr "Игры"
-
-#: fool_cards:682
+#: CardGames/code/fool_cards.py:700
 msgid "Yes"
 msgstr "Да"
 
-#: fool_cards:685
-msgid "No"
-msgstr "Нет"
+#: CardGames/code/fool_cards.py:712
+msgid " leave your room! Wait other players...."
+msgstr " покинул вашу команту! Дождитесь других игроков..."
+
+#: CardGames/code/fool_cards.py:716
+msgid "Problems with connection! Connection_closed!"
+msgstr "Проблемы с соединением! Соединение потеряно!"
+
+#: CardGames/code/fool_cards.py:776
+msgid "Left"
+msgstr "Влево"
+
+#: CardGames/code/fool_cards.py:781
+msgid "Right"
+msgstr "Вправо"
+
+#: CardGames/code/fool_cards.py:789
+msgid "Take"
+msgstr "Взять"
+
+#: CardGames/code/fool_cards.py:795 CardGames/code/queen.py:87
+msgid "Ready"
+msgstr "Готов"
+
+#: CardGames/code/menu.py:33
+msgid "Exit"
+msgstr "Выйти"
+
+#: CardGames/code/menu.py:62 CardGames/code/menu.py:115
+msgid "Blackjack"
+msgstr "Блекджек"
+
+#: CardGames/code/menu.py:82 CardGames/code/menu.py:115
+msgid "Queen"
+msgstr "Пиковая Дама"
+
+#: CardGames/code/menu.py:112
+msgid "Cards Games"
+msgstr "Карточные игры"
+
+#: CardGames/code/menu.py:118
+msgid "Games"
+msgstr "Игры"
+

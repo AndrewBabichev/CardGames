@@ -7,9 +7,14 @@ import os
 
 from os.path import join
 from PIL import Image, ImageTk
-from playsound import playsound
 from functools import partial
 
+try:
+    from playsound import playsound
+except ImportError:
+    def playsound(filename):
+        """Empty functions if import fails."""
+        pass
 
 import json
 
@@ -531,7 +536,7 @@ class OnlineReferee(Referee):
         self.table.reset()
 
     def handle_message(self, msg):
-        """Recieve message from server and make some actions that depends on mesg."""
+        """Recieve message from server and make some actions."""
         msg = msg['message']
 
         if msg['action_type'] == 'player_addition':

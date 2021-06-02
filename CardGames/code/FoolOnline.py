@@ -220,7 +220,10 @@ class FoolGame(tk.Toplevel):
 
         self.main = main
         self.title(_("Fool-online"))
-        self.geometry("1600x1000")
+        screen_width = main.winfo_screenwidth()
+        screen_height = main.winfo_screenheight()
+
+        self.geometry("{}x{}".format(screen_width, screen_height))
         self.protocol("WM_DELETE_WINDOW", self.destroy)
         self.name = name
         self.ws_game = ws_game
@@ -233,7 +236,7 @@ class FoolGame(tk.Toplevel):
 
         # -----------------------------------------------------------------------
         self.info_frame = tk.Frame(self)
-        self.info_frame.place(relx=0.5, rely=0.05)
+        self.info_frame.place(relx=0.44, rely=0.05)
         self.info_s = tk.StringVar()
         self.info = tk.Label(self.info_frame, text=_("Info:"))
         self.info_var = tk.Label(self.info_frame, textvariable=self.info_s)
@@ -254,10 +257,10 @@ class FoolGame(tk.Toplevel):
         self.player = Player(self, 2, self.name, self.referee)
         self.referee.player = self.player
 
-        self.table = Table(self, 0.53, 0.6, 4, self.referee)
+        self.table = Table(self, 0.56, 0.65, 4, self.referee)
         self.referee.table = self.table
 
-        self.score_table = ScoreTable(self, 0.75, 0.1)
+        self.score_table = ScoreTable(self, 0.79, 0.1)
         self.referee.score_table = self.score_table
 
         self.updateGUI()

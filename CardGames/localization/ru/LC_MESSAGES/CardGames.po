@@ -35,6 +35,22 @@ msgstr "Победа"
 msgid "Draw"
 msgstr "Ничья"
 
+#: fool_cards.py:672
+msgid "Draw"
+msgstr "Ничья"
+
+#: fool_cards.py:672
+msgid "Draw"
+msgstr "Ничья"
+
+#: fool_cards.py:676
+msgid "Repeat?"
+msgstr "Ещё раз?"
+
+#: fool_cards.py:677
+msgid "Would you like to continue game?"
+msgstr "Хотете сыграть ещё раз?"
+
 #: fool_cards.py:288
 msgid "Not allowed operation"
 msgstr "Неразрешенная операция"
@@ -187,3 +203,10 @@ msgstr "Карточные игры"
 msgid "Games"
 msgstr "Игры"
 
+#: fool_cards:682
+msgid "Yes"
+msgstr "Да"
+
+#: fool_cards:685
+msgid "No"
+msgstr "Нет"

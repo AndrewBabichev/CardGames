@@ -387,12 +387,13 @@ class OnlineReferee(Referee):
 
             self.game_socket.send(msg)
 
-            if not len(self.player.cards):
-                self.ready()
-
             if not len(self.player.cards) and not self.deck.size:
 
                 self.__free_user()
+                return
+            if not len(self.player.cards):
+                self.ready()
+
 
     def response(self, r_card, a_card):
         """add reponse card and send message about it."""
@@ -523,9 +524,13 @@ class OnlineReferee(Referee):
 
         if msg['action_type'] == 'player_addition':
 
+            self.score_table.reset()
             _message = str(msg['time']) + _(":Player ")
             _message += str(msg['sender']) + _(" come in your room!")
             self.info.set(_message)
+
+        elif msg['action_type'] == 'your_name':
+            self.player.name = msg['sender']
 
         elif msg['action_type'] == 'users_scores':
             for key in msg['action_info']['scores'].keys():
@@ -587,7 +592,7 @@ class OnlineReferee(Referee):
                     self.player.status == 'response':
                 self.player.take['state'] = tk.DISABLED
 
-            elif self.player.status == 'free' or remain_cards == 0:
+            elif self.player.status == 'free' and not len(self.table.a_cards):
                 self.ready()
 
             playsound(os.path.join(RESOURSES_DIR, 'sounds/draw.wav'))
@@ -668,14 +673,16 @@ class OnlineReferee(Referee):
 
         elif msg['action_type'] == 'repeat':
             ask_window = tk.Toplevel(self.player.master)
-            ask_window.title("Repeat?")
+            ask_window.title(_("Repeat?"))
+            ask_text = _("Would you like to continue game?")
             text = tk.Label(
                 ask_window,
-                text="Would you like to continue game?")
-            no_btn = tk.Button(ask_window, text='No')
+                text=ask_text)
+
+            no_btn = tk.Button(ask_window, text=_('No'))
             no_btn['command'] = partial(self.__send_ans, 'no', no_btn)
 
-            yes_btn = tk.Button(ask_window, text='yes')
+            yes_btn = tk.Button(ask_window, text=_('Yes'))
             yes_btn['command'] = partial(self.__send_ans, 'yes', yes_btn)
 
             text.grid(row=0, column=0, columnspan=2)
@@ -717,8 +724,8 @@ class OnlineReferee(Referee):
             btn['state'] = tk.DISABLED
             self.game_socket.close()
             self.chat_socket.close()
-            btn.master.master.master.destroy()
-            btn.master.master.master.quit()
+            btn.master.master.destroy()
+            #btn.master.master.quit()
 
 
 class Player(tk.Frame):
@@ -936,7 +943,11 @@ class ScoreTable(tk.Frame):
                 frame.grid(row=elem['position'])
         self.length -= 1
 
-    def update(self, users_scores):
+    def update(self, users_scores=None):
         for user_name, value in users_scores.items():
 
             self.players_scores_values[user_name].set(value)
+
+    def reset(self):
+        for player_name in self.players_scores_tk.keys():
+            self.players_scores_values[player_name].set("0")

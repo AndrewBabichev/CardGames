@@ -237,7 +237,7 @@ class Table(tk.Button):
         """Clear table."""
         self.empty_row = 0
         self.empty_column = 0
-        self.card_values = set()
+        self.cards_values.clear()
 
         for card in list(self.a_cards.values()) + list(self.r_cards.values()):
             card.destroy()
@@ -286,6 +286,7 @@ class Referee(object):
         card_type = card.card_id[0]
         card_value = card.card_id[1]
 
+        print("values:", self.table.cards_values)
         if self.player.status == 'attack':
             addition()
             self.player.status = 'addition'
@@ -480,7 +481,7 @@ class OnlineReferee(Referee):
                 }
             }
         })
-
+        self.table.reset()
         self.player.ready['state'] = tk.DISABLED
         self.player.state = 'wait'
         self.game_socket.send(msg)
@@ -562,8 +563,8 @@ class OnlineReferee(Referee):
             self.score_table.update(scores)
 
         elif msg['action_type'] == 'card_addition':
-            card_type = msg['action_info']['card_type']
-            card_value = msg['action_info']['card_value']
+            card_type = int(msg['action_info']['card_type'])
+            card_value = int(msg['action_info']['card_value'])
             sender_name = msg['sender']
 
             if self.player.name != sender_name:

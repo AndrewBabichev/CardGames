@@ -267,6 +267,7 @@ class Referee(object):
         self.table = table
         self.info = info
         self.score_table = score_table
+        self.remain_cards = 6
 
     def add_card_on_table(self, card):
         """
@@ -383,6 +384,9 @@ class OnlineReferee(Referee):
 
     def add_card_on_table(self, card):
         """Add card on table and send message about it."""
+        if not self.remain_cards:
+            return
+
         card = Referee.add_card_on_table(self, card)
 
         if card is not None:
@@ -594,6 +598,7 @@ class OnlineReferee(Referee):
             r_card_type = msg['action_info']['r_card_type']
             r_card_value = msg['action_info']['r_card_value']
 
+            self.remain_cards = msg['action_info']['remain_cards']
             r_card = self.deck.create_card(None, (r_card_type, r_card_value))
             a_card = self.table.a_cards[(a_card_type, a_card_value)]
 
@@ -890,15 +895,12 @@ class Player(tk.Frame):
             if self.clicked_button in self.cards:
                 print("In cards")
                 if btn == self.referee.table:
-                    print("here")
                     self.referee.add_card_on_table(self.clicked_button)
 
                 elif btn in self.cards:
-                    print("change cards")
                     self.__change2cards(btn, self.clicked_button)
 
                 elif btn in self.referee.table.a_cards.values():
-                    print("try response")
                     self.referee.response(self.clicked_button, btn)
 
             self.clicked_button = None

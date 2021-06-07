@@ -4,19 +4,22 @@ import tkinter as tk
 import numpy as np
 import tkinter.font as font
 import os
+import json
 
 from os.path import join
 from PIL import Image, ImageTk
 from functools import partial
 
+
+RESOURSES_DIR = os.path.join(os.path.dirname(__file__), "..", 'resources')
+
 try:
     from playsound import playsound
+    playsound(join(RESOURSES_DIR, 'sounds/shuffle.wav'))
 except ImportError:
     def playsound(filename):
         """Empty functions if import fails."""
         pass
-
-import json
 
 PLAYERS_TYPES = ['atack', 'responce', 'addition']
 STATUS = 'Attacked'
